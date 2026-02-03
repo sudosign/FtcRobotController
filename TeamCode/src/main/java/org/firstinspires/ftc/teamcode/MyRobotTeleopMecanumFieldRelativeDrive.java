@@ -125,20 +125,6 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         telemetry.addLine("Hold left trigger to drive in robot relative");
         telemetry.addLine("Hold right trigger to drive in 50% speed");
 
-        // Boolean intakeOn=false;
-        // //If you press Y or the up on DPAD on the 2nd controller, the intake spins
-        // if ((gamepad2.y) || (gamepad2.dpad_up) || (gamepad1.y) || (gamepad1.dpad_up)) {
-        //     intakeOn = !intakeOn;
-        // }
-
-
-        // if ((gamepad1.x)||(gamepad2.x)){
-        //     intake.setPower(-0.7);
-        // } else {
-        //     if (intakeOn==true){intake.setPower(0.5);}
-        //     else {intake.setPower(0);}
-        // }
-
         if ((gamepad1.y) || (gamepad2.y)) {
             intake.setPower(-0.7);
         } else if (gamepad1.dpad_up){
@@ -150,23 +136,6 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
         //using the bumpers you can toggle left and right shooters
 
-        // Boolean shooterOn = false;
-
-        // if ((gamepad1.a) || (gamepad2.a)) {
-        //     shooterOn = !shooterOn;
-        // }
-
-        // if (shooterOn) {
-        //     shooterLeft.setPower(0);
-        //     shooterRight.setPower(0);
-        //     shooterOn = false;
-        // }
-        // else {
-        //     shooterLeft.setPower(0.7);
-        //     shooterRight.setPower(0.7);
-        //     shooterOn = true;
-        // }
-
         if (gamepad1.a){
             shooterRight.setPower(1);
             shooterLeft.setPower(1);
@@ -176,52 +145,28 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
             shooterRight.setPower(0);
         }
 
-        // double leftShooter=0;
-        // double rightShooter=0;
 
-        // if ((gamepad2.left_bumper) || (gamepad1.left_bumper)){
-        //     if(leftShooter==0){
-        //         shooterLeft.setPower(1);
-        //         leftShooter=12;
-        //     }else{
-        //         shooterLeft.setPower(0);
-        //         leftShooter=0;
-        //     }
-        // }
-
-        // if ((gamepad2.right_bumper) || (gamepad1.right_bumper)){
-        //     if (rightShooter==0){
-        //         shooterRight.setPower(1);
-        //         rightShooter=1434; //orz orz orz
-        //     }else{
-        //         shooterRight.setPower(0);
-        //         rightShooter=0;
-        //     }
-        // }
-
-
-        if ((gamepad2.right_bumper)||(gamepad1.right_bumper)){
+        if ((gamepad2.left_bumper)||(gamepad1.left_bumper)){
             //move RIGHT servo to the rotated position like 90 degrees prob
-            FlickRight.setPosition(0.48);
-            assert true;
+
+            //flick right is actually the left servo lmao
+            FlickRight.setPosition(0.55);
         }else{
             //move RIGHT servo back to original position
             FlickRight.setPosition(0.85);
-            assert true;
         }
+        assert true;
 
-        if ((gamepad2.left_bumper) || (gamepad1.left_bumper)){
+        if ((gamepad2.right_bumper) || (gamepad1.right_bumper)){
             //move LEFT servo to the rotated position like 90 degrees prob
-            FlickLeft.setPosition(0.37);
-            assert true;
+
+            //flick left is actually the right servo lmao
+            FlickLeft.setPosition(0.35);
         }else{
             //move LEFT servo back to original position
-            FlickLeft.setPosition(0);
-            assert true;
+            FlickLeft.setPosition(0.05);
         }
-
-
-
+        assert true;
 
 
         // If you press the Y button, then you reset the Yaw to be zero from the way
@@ -276,7 +221,7 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         double backLeftPower = -forward - right + rotate;
 
         double maxPower = 1.0;
-        double maxSpeed=0.5;
+        double maxSpeed;
 
         if (gamepad1.right_trigger>0.5) {
             maxSpeed=0.5;
