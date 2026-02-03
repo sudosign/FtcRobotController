@@ -36,185 +36,157 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-/*
- * This OpMode illustrates how to program your robot to drive field relative.  This means
- * that the robot drives the direction you push the joystick regardless of the current orientation
- * of the robot.
- *
- * This OpMode assumes that you have four mecanum wheels each on its own motor named:
- *   front_left_motor, front_right_motor, back_left_motor, back_right_motor
- *
- *   and that the left motors are flipped such that when they turn clockwise the wheel moves backwards
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
- *
- */
-@TeleOp(name = "MAIN Drive (Dual Mode)", group = "Robot")
 
+@TeleOp(name = "MAIN Drive (Dual Mode)", group = "Robot")
 public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
-    // This declares the four motors needed
+
+    // Drive motors
     DcMotor frontLeftDrive;
     DcMotor frontRightDrive;
     DcMotor backLeftDrive;
     DcMotor backRightDrive;
+
+    // Mechanisms
     DcMotor shooterLeft;
     DcMotor intake;
     DcMotor shooterRight;
+
+    // Flick servos
     Servo FlickLeft;
     Servo FlickRight;
 
-    // This declares the IMU needed to get the current direction the robot is facing
+    // IMU (for heading)
     IMU imu;
 
     @Override
     public void init() {
+        // Map hardware
         frontLeftDrive = hardwareMap.get(DcMotor.class, "driveLeftFront");
         frontRightDrive = hardwareMap.get(DcMotor.class, "driveRightFront");
         backLeftDrive = hardwareMap.get(DcMotor.class, "driveLeftRear");
         backRightDrive = hardwareMap.get(DcMotor.class, "driveRightRear");
 
-
         shooterLeft = hardwareMap.get(DcMotor.class, "shooterLeft");
         intake = hardwareMap.get(DcMotor.class, "intake");
         shooterRight = hardwareMap.get(DcMotor.class, "shooterRight");
 
-        FlickLeft = hardwareMap.get(Servo.class, "FlickLeft" );
+        FlickLeft = hardwareMap.get(Servo.class, "FlickLeft");
         FlickRight = hardwareMap.get(Servo.class, "FlickRight");
 
-        // We set the left motors in reverse which is needed for drive trains where the left
-        // motors are opposite to the right ones.
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
 
-
-
-        //reverses one of the shooter motors so we run both same direction to shoot
+        // Reverse one shooter motor so both shooters spin the same
         shooterRight.setDirection(DcMotor.Direction.REVERSE);
 
+        // Starting positions
         FlickLeft.setPosition(0);
         FlickRight.setPosition(0.85);
 
-        // This uses RUN_USING_ENCODER to be more accurate.   If you don't have the encoder
-        // wires, you should remove these
+        // Encoders for more consistent drive response
         frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        // Brake
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         imu = hardwareMap.get(IMU.class, "imu");
-        // This needs to be changed to match the orientation on your robot
+
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD;
         RevHubOrientationOnRobot.UsbFacingDirection usbDirection =
                 RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
 
-        RevHubOrientationOnRobot orientationOnRobot = new
-                RevHubOrientationOnRobot(logoDirection, usbDirection);
+        RevHubOrientationOnRobot orientationOnRobot =
+                new RevHubOrientationOnRobot(logoDirection, usbDirection);
+
         imu.initialize(new IMU.Parameters(orientationOnRobot));
     }
 
     @Override
     public void loop() {
-        telemetry.addLine("Press B to reset Yaw");
-        telemetry.addLine("Hold left trigger to drive in robot relative");
-        telemetry.addLine("Hold right trigger to drive in 50% speed");
+        telemetry.addLine("B: reset yaw");
+        telemetry.addLine("Hold LT: robot-centric");
+        telemetry.addLine("Hold RT: slow mode");
 
+        // Intake controls (as coded):
+        // - Y on either controller: intake in
+        // - X on gamepad1 only: intake out
+        // - D-pad up on gamepad1 only: stop intake
         if ((gamepad1.y) || (gamepad2.y)) {
             intake.setPower(-0.7);
-        } else if (gamepad1.dpad_up){
+        } else if (gamepad1.dpad_up) {
             intake.setPower(0);
-        } else if (gamepad1.x){
+        } else if (gamepad1.x) {
             intake.setPower(0.7);
         }
 
-
-        //using the bumpers you can toggle left and right shooters
-
-        if (gamepad1.a){
+        // Shooter controls (gamepad1):
+        // - A: shooters on
+        // - D-pad down: shooters off
+        if (gamepad1.a) {
             shooterRight.setPower(1);
             shooterLeft.setPower(1);
         }
-        if (gamepad1.dpad_down){
+        if (gamepad1.dpad_down) {
             shooterLeft.setPower(0);
             shooterRight.setPower(0);
         }
 
-
-        if ((gamepad2.left_bumper)||(gamepad1.left_bumper)){
-            //move RIGHT servo to the rotated position like 90 degrees prob
-
-            //flick right is actually the left servo lmao
+        // Flickers (hold to actuate, release to return):
+        if ((gamepad2.left_bumper) || (gamepad1.left_bumper)) {
             FlickRight.setPosition(0.55);
-        }else{
-            //move RIGHT servo back to original position
+        } else {
             FlickRight.setPosition(0.85);
         }
-        assert true;
 
-        if ((gamepad2.right_bumper) || (gamepad1.right_bumper)){
-            //move LEFT servo to the rotated position like 90 degrees prob
-
-            //flick left is actually the right servo lmao
+        if ((gamepad2.right_bumper) || (gamepad1.right_bumper)) {
             FlickLeft.setPosition(0.35);
-        }else{
-            //move LEFT servo back to original position
+        } else {
             FlickLeft.setPosition(0.05);
         }
-        assert true;
 
-
-        // If you press the Y button, then you reset the Yaw to be zero from the way
-        // the robot is currently pointing
+        // Reset heading (yaw) to zero from the current robot direction
         if (gamepad1.b) {
             imu.resetYaw();
-
         }
-        // If you press the left bumper, you get a drive from the point of view of the robot
-        // (much like driving an RC vehicle)
-        if (gamepad1.left_trigger>.5) {
+
+        // Drive mode selection
+        if (gamepad1.left_trigger > .5) {
             drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-            telemetry.addLine("Robot Centric");
+            telemetry.addLine("Drive: Robot Centric");
         } else {
             driveFieldRelative(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-            telemetry.addLine("Field Centric");
+            telemetry.addLine("Drive: Field Centric");
         }
-        //adds telemetry for function op
+
         telemetry.addLine("");
-        telemetry.addLine("Y or DPAD UP will toggle the intake");
-        telemetry.addLine("Use Bumpers to toggle left and right shooters");
+        telemetry.addLine("Intake: Y=in, X=out, DPadUp=stop");
+        telemetry.addLine("Shooter: A=on, DPadDown=off");
+        telemetry.addLine("Flick: hold bumpers");
     }
 
-
-
-
-    // This routine drives the robot field relative
+    // Field-centric wrapper: rotate the driver input by the robot heading
     private void driveFieldRelative(double forward, double right, double rotate) {
-        // First, convert direction being asked to drive to polar coordinates
         double theta = Math.atan2(forward, right);
         double r = Math.hypot(right, forward);
 
-        // Second, rotate angle by the angle the robot is pointing
         theta = AngleUnit.normalizeRadians(theta -
                 imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
 
-        // Third, convert back to cartesian
         double newForward = r * Math.sin(theta);
         double newRight = r * Math.cos(theta);
 
-        // Finally, call the drive method with robot relative forward and right amounts
         drive(newForward, newRight, rotate);
     }
 
-    // Thanks to FTC16072 for sharing this code!!
+    // Mecanum mix + normalization
     public void drive(double forward, double right, double rotate) {
-        // This calculates the power needed for each wheel based on the amount of forward,
-        // strafe right, and rotate
         double frontLeftPower = forward + right + rotate;
         double frontRightPower = forward - right - rotate;
         double backRightPower = -forward + right - rotate;
@@ -223,25 +195,21 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         double maxPower = 1.0;
         double maxSpeed;
 
-        if (gamepad1.right_trigger>0.5) {
-            maxSpeed=0.5;
+        // Slow mode while holding RT
+        if (gamepad1.right_trigger > 0.5) {
+            maxSpeed = 0.5;
             telemetry.addLine("Speed: Slow");
-        }else{
-            maxSpeed = 1.0;  // make this slower if u wanna go slower
+        } else {
+            maxSpeed = 1.0;
             telemetry.addLine("Speed: Normal");
         }
 
-        // This is needed to make sure we don't pass > 1.0 to any wheel
-        // It allows us to keep all of the motors in proportion to what they should
-        // be and not get clipped
+        // Normalize so no wheel command exceeds 1.0 (keeps proportions the same)
         maxPower = Math.max(maxPower, Math.abs(frontLeftPower));
         maxPower = Math.max(maxPower, Math.abs(frontRightPower));
         maxPower = Math.max(maxPower, Math.abs(backRightPower));
         maxPower = Math.max(maxPower, Math.abs(backLeftPower));
 
-        // We multiply by maxSpeed so that it can be set lower for outreaches
-        // When a young child is driving the robot, we may not want to allow full
-        // speed.
         frontLeftDrive.setPower(maxSpeed * (frontLeftPower / maxPower));
         frontRightDrive.setPower(maxSpeed * (frontRightPower / maxPower));
         backLeftDrive.setPower(maxSpeed * (backLeftPower / maxPower));
