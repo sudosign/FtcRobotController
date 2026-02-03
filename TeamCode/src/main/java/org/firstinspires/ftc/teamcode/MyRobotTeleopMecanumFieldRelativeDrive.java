@@ -52,8 +52,8 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
     DcMotor shooterRight;
 
     // Flick servos
-    Servo FlickLeft;
-    Servo FlickRight;
+    Servo flickLeft;
+    Servo flickRight;
 
     // IMU (for heading)
     IMU imu;
@@ -70,8 +70,8 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         intake = hardwareMap.get(DcMotor.class, "intake");
         shooterRight = hardwareMap.get(DcMotor.class, "shooterRight");
 
-        FlickLeft = hardwareMap.get(Servo.class, "FlickLeft");
-        FlickRight = hardwareMap.get(Servo.class, "FlickRight");
+        flickLeft = hardwareMap.get(Servo.class, "FlickLeft");
+        flickRight = hardwareMap.get(Servo.class, "FlickRight");
 
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -80,8 +80,8 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         shooterRight.setDirection(DcMotor.Direction.REVERSE);
 
         // Starting positions
-        FlickLeft.setPosition(0);
-        FlickRight.setPosition(0.85);
+        flickLeft.setPosition(0.05);
+        flickRight.setPosition(0.85);
 
         // Encoders for more consistent drive response
         frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -140,15 +140,15 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
         // Flickers (hold to actuate, release to return):
         if ((gamepad2.left_bumper) || (gamepad1.left_bumper)) {
-            FlickRight.setPosition(0.55);
+            flickRight.setPosition(0.55);
         } else {
-            FlickRight.setPosition(0.85);
+            flickRight.setPosition(0.85);
         }
 
         if ((gamepad2.right_bumper) || (gamepad1.right_bumper)) {
-            FlickLeft.setPosition(0.35);
+            flickLeft.setPosition(0.35);
         } else {
-            FlickLeft.setPosition(0.05);
+            flickLeft.setPosition(0.05);
         }
 
         // Reset heading (yaw) to zero from the current robot direction
