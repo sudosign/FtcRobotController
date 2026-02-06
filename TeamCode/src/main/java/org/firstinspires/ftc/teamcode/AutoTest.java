@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -65,6 +66,8 @@ public class AutoTest extends LinearOpMode {
     DcMotor shooterLeft;
     DcMotor intake;
     DcMotor shooterRight;
+    Servo FlickLeft;
+    Servo FlickRight;
 
     /* Declare OpMode members. */
 
@@ -84,10 +87,20 @@ public class AutoTest extends LinearOpMode {
         backLeftDrive = hardwareMap.get(DcMotor.class, "driveLeftRear");
         backRightDrive = hardwareMap.get(DcMotor.class, "driveRightRear");
 
+        FlickLeft = hardwareMap.get(Servo.class, "FlickLeft" );
+        FlickRight = hardwareMap.get(Servo.class, "FlickRight");
 
         shooterLeft = hardwareMap.get(DcMotor.class, "shooterLeft");
         intake = hardwareMap.get(DcMotor.class, "intake");
         shooterRight = hardwareMap.get(DcMotor.class, "shooterRight");
+
+        shooterRight.setDirection(DcMotor.Direction.REVERSE);
+
+        shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        FlickLeft.setPosition(0.85);
+        FlickRight.setPosition(0.05);
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -99,15 +112,74 @@ public class AutoTest extends LinearOpMode {
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
 
+        backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+
         // Wait for the game to start (driver presses START)
         waitForStart();
 
+
+
+
         // Step through each leg of the path, ensuring that the OpMode has not been stopped along the way.
-        backLeftDrive.setPower(.25);
+        backLeftDrive.setPower(-.25);
         backRightDrive.setPower(-.25);
         frontLeftDrive.setPower(-.25);
-        frontRightDrive.setPower(.25);
+        frontRightDrive.setPower(-.25);
+        sleep(2500);
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+        sleep(1000);
+
+        shooterRight.setPower(0.85);
+        shooterLeft.setPower(0.85);
+        sleep(5000);
+
+        FlickRight.setPosition(0.35);
         sleep(2000);
+        FlickRight.setPosition(0.05);
+        sleep(1500);
+        FlickLeft.setPosition(0.55);
+        sleep(2000);
+        FlickLeft.setPosition(0.85);
+        sleep(1500);
+
+
+
+
+
+
+
+
+
+        shooterLeft.setPower(0);
+        shooterRight.setPower(0);
+        sleep(2000);
+
+        frontLeftDrive.setPower(0.25);
+        backLeftDrive.setPower(0.25);
+        frontRightDrive.setPower(-0.25);
+        backRightDrive.setPower(-0.25);
+        sleep(1000);
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+        sleep(1000);
+
+        frontLeftDrive.setPower(0.25);
+        backLeftDrive.setPower(0.25);
+        frontRightDrive.setPower(0.25);
+        backRightDrive.setPower(0.25);
+        sleep(2000);
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+
+
         // Step 1:  Drive forward for 3 seconds
         // leftDrive.setPower(FORWARD_SPEED);
         // rightDrive.setPower(FORWARD_SPEED);
@@ -136,10 +208,7 @@ public class AutoTest extends LinearOpMode {
         // }
 
         // Step 4:  Stop
-        frontLeftDrive.setPower(0);
-        frontRightDrive.setPower(0);
-        backLeftDrive.setPower(0);
-        backRightDrive.setPower(0);
+
 
 
         telemetry.addData("Path", "Complete");

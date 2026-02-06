@@ -70,8 +70,10 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
     @Override
     public void init() {
-        frontLeftDrive = hardwareMap.get(DcMotor.class, "driveLeftFront");
-        frontRightDrive = hardwareMap.get(DcMotor.class, "driveRightFront");
+
+        //front left and front right are switched for tesitng currently
+        frontRightDrive = hardwareMap.get(DcMotor.class, "driveLeftFront");
+        frontLeftDrive = hardwareMap.get(DcMotor.class, "driveRightFront");
         backLeftDrive = hardwareMap.get(DcMotor.class, "driveLeftRear");
         backRightDrive = hardwareMap.get(DcMotor.class, "driveRightRear");
 
@@ -85,8 +87,8 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
         // We set the left motors in reverse which is needed for drive trains where the left
         // motors are opposite to the right ones.
-        backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
 
 
 
@@ -96,8 +98,10 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        FlickLeft.setPosition(0.05);
-        FlickRight.setPosition(0.85);
+        FlickLeft.setPosition(0.85);
+        FlickRight.setPosition(0.05);
+
+
 
         // This uses RUN_USING_ENCODER to be more accurate.   If you don't have the encoder
         // wires, you should remove these
@@ -130,22 +134,30 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         telemetry.addLine("Hold right trigger to drive in 50% speed");
 
 
+
+
         //intake toggles
-        if ((gamepad1.y) || (gamepad2.y)) {
+        if ((gamepad1.y)||(gamepad2.y)) {
             intake.setPower(-0.7);
-        } else if (gamepad1.dpad_up){
+
+        } else if ((gamepad1.dpad_up)||(gamepad2.dpad_up)){
             intake.setPower(0);
-        } else if (gamepad1.x){
+
+        } else if ((gamepad1.x)||(gamepad2.x)){
             intake.setPower(0.7);
         }
 
 
+
+
+
+
         //shooter toggle
-        if (gamepad1.a){
-            shooterRight.setPower(1);
-            shooterLeft.setPower(1);
+        if ((gamepad1.a)||(gamepad2.a)){
+            shooterRight.setPower(0.85);
+            shooterLeft.setPower(0.85);
         }
-        if (gamepad1.dpad_down){
+        if ((gamepad1.dpad_down)||(gamepad2.dpad_down)){
             shooterLeft.setPower(0);
             shooterRight.setPower(0);
         }
@@ -154,47 +166,47 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
 
 
-        if ((gamepad2.left_bumper)||(gamepad1.left_bumper)){
+        if ((gamepad2.right_bumper)||(gamepad1.right_bumper)){
             //move RIGHT servo to the rotated position like 90 degrees prob
 
-            //flick right is actually the left servo lmao
-            FlickRight.setPosition(0.55);
+
+            FlickRight.setPosition(0.35);
             assert true;
         }else{
             //move RIGHT servo back to original position
-            FlickRight.setPosition(0.85);
+            FlickRight.setPosition(0.05);
             assert true;
         }
 
-        if ((gamepad2.right_bumper) || (gamepad1.right_bumper)){
+        if ((gamepad2.left_bumper) || (gamepad1.left_bumper)){
             //move LEFT servo to the rotated position like 90 degrees prob
 
-            //flick left is actually the right servo lmao
-            FlickLeft.setPosition(0.35);
-            assert true;
+
+            FlickLeft.setPosition(0.55);
+
         }else{
             //move LEFT servo back to original position
-            FlickLeft.setPosition(0.05);
-            assert true;
+            FlickLeft.setPosition(0.85);
+
         }
 
 
 
 
 
-        // If you press the Y button, then you reset the Yaw to be zero from the way
+        // If you press the B button, then you reset the Yaw to be zero from the way
         // the robot is currently pointing
         if (gamepad1.b) {
             imu.resetYaw();
 
         }
-        // If you press the left bumper, you get a drive from the point of view of the robot
+        // If you press the left trigger, you get a drive from the point of view of the robot
         // (much like driving an RC vehicle)
         if (gamepad1.left_trigger>.5) {
-            drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            drive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x);
             telemetry.addLine("Robot Centric");
         } else {
-            driveFieldRelative(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            driveFieldRelative(gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x);
             telemetry.addLine("Field Centric");
         }
         //adds telemetry for function op
@@ -213,8 +225,8 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         double r = Math.hypot(right, forward);
 
         // Second, rotate angle by the angle the robot is pointing
-        theta = AngleUnit.normalizeRadians(theta -
-                imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
+        theta = -(AngleUnit.normalizeRadians(theta -
+                imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)));
 
         // Third, convert back to cartesian
         double newForward = r * Math.sin(theta);
