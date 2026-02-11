@@ -138,13 +138,13 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
         //intake toggles
         if ((gamepad1.y)||(gamepad2.y)) {
-            intake.setPower(-0.7);
+            intake.setPower(-1);
 
         } else if ((gamepad1.dpad_up)||(gamepad2.dpad_up)){
             intake.setPower(0);
 
         } else if ((gamepad1.x)||(gamepad2.x)){
-            intake.setPower(0.7);
+            intake.setPower(1);
         }
 
 
@@ -154,8 +154,8 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
         //shooter toggle
         if ((gamepad1.a)||(gamepad2.a)){
-            shooterRight.setPower(0.85);
-            shooterLeft.setPower(0.85);
+            shooterRight.setPower(0.6);
+            shooterLeft.setPower(0.6);
         }
         if ((gamepad1.dpad_down)||(gamepad2.dpad_down)){
             shooterLeft.setPower(0);
