@@ -27,11 +27,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.hardcodeAutons;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -55,9 +54,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="blue-close 2ball", group="Robot")
+@Autonomous(name="red-far 2ball", group="Robot")
 
-public class blueSideClose extends LinearOpMode {
+public class redSideFar extends LinearOpMode {
 
     DcMotor frontLeftDrive;
     DcMotor frontRightDrive;
@@ -120,22 +119,33 @@ public class blueSideClose extends LinearOpMode {
 
 
 
-        //drive backward for 2.5 seconds, and then stop for 1 se ond
-        backLeftDrive.setPower(-.25);
-        backRightDrive.setPower(-.25);
-        frontLeftDrive.setPower(-.25);
-        frontRightDrive.setPower(-.25);
-        sleep(2500);
+        //drive forward for .5 seconds, and then stop for 1 se ond
+        backLeftDrive.setPower(.25);
+        backRightDrive.setPower(.25);
+        frontLeftDrive.setPower(.25);
+        frontRightDrive.setPower(.25);
+        sleep(500);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
         backRightDrive.setPower(0);
         sleep(1000);
 
+        //turn a bit right
+        frontLeftDrive.setPower(0.25);
+        frontRightDrive.setPower(-0.25);
+        backLeftDrive.setPower(0.25);
+        backRightDrive.setPower(-0.25);
+        sleep(250);
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+        sleep(1000);
 
         //turn on shooters, and wait 3 seconds for it to spin up
-        shooterRight.setPower(0.6);
-        shooterLeft.setPower(0.6);
+        shooterRight.setPower(0.8);
+        shooterLeft.setPower(0.8);
         sleep(3000);
 
         //shoot the right
@@ -156,12 +166,12 @@ public class blueSideClose extends LinearOpMode {
         shooterRight.setPower(0);
         sleep(2000);
 
-        //turns right for 1 second, stops, and waits 1 second
-        frontLeftDrive.setPower(0.25);
-        backLeftDrive.setPower(0.25);
-        frontRightDrive.setPower(-0.25);
-        backRightDrive.setPower(-0.25);
-        sleep(1000);
+        //turns back, stops, and waits 1 second
+        frontLeftDrive.setPower(-0.25);
+        backLeftDrive.setPower(-0.25);
+        frontRightDrive.setPower(0.25);
+        backRightDrive.setPower(0.25);
+        sleep(250);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
@@ -171,44 +181,16 @@ public class blueSideClose extends LinearOpMode {
 
         //drives 2 seconds forward, and stops
         frontLeftDrive.setPower(0.25);
-        backLeftDrive.setPower(0.25);
-        frontRightDrive.setPower(0.25);
+        backLeftDrive.setPower(-0.25);
+        frontRightDrive.setPower(-0.25);
         backRightDrive.setPower(0.25);
-        sleep(2000);
+        sleep(3000);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
         backRightDrive.setPower(0);
 
 
-        // Step 1:  Drive forward for 3 seconds
-        // leftDrive.setPower(FORWARD_SPEED);
-        // rightDrive.setPower(FORWARD_SPEED);
-        // runtime.reset();
-        // while (opModeIsActive() && (runtime.seconds() < 3.0)) {
-        //     telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
-        //     telemetry.update();
-        // }
-
-        // Step 2:  Spin right for 1.3 seconds
-        // leftDrive.setPower(TURN_SPEED);
-        // rightDrive.setPower(-TURN_SPEED);
-        // runtime.reset();
-        // while (opModeIsActive() && (runtime.seconds() < 1.3)) {
-        //     telemetry.addData("Path", "Leg 2: %4.1f S Elapsed", runtime.seconds());
-        //     telemetry.update();
-        // }
-
-        // Step 3:  Drive Backward for 1 Second
-        // leftDrive.setPower(-FORWARD_SPEED);
-        // rightDrive.setPower(-FORWARD_SPEED);
-        // runtime.reset();
-        // while (opModeIsActive() && (runtime.seconds() < 1.0)) {
-        //     telemetry.addData("Path", "Leg 3: %4.1f S Elapsed", runtime.seconds());
-        //     telemetry.update();
-        // }
-
-        // Step 4:  Stop
 
 
 
