@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.hardcodeAutons;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -98,8 +98,8 @@ public class blueSideClose extends LinearOpMode {
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        FlickLeft.setPosition(0.85);
-        FlickRight.setPosition(0.05);
+        FlickLeft.setPosition(0.835);
+        FlickRight.setPosition(0.035);
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -138,16 +138,33 @@ public class blueSideClose extends LinearOpMode {
         sleep(3000);
 
         //shoot the right
-        FlickRight.setPosition(0.35);
-        sleep(2000);
-        FlickRight.setPosition(0.05);
-        sleep(1500);
+        FlickRight.setPosition(0.3);
+        sleep(500);
+        FlickRight.setPosition(0.035);
+        sleep(500);
 
         //shoot the left
-        FlickLeft.setPosition(0.55);
-        sleep(2000);
-        FlickLeft.setPosition(0.85);
-        sleep(1500);
+        FlickLeft.setPosition(0.575);
+        sleep(500);
+        FlickLeft.setPosition(0.835);
+        sleep(500);
+
+        intake.setPower(-1);
+        sleep(1000);
+        intake.setPower(0);
+
+
+        //reshoot the right
+        FlickRight.setPosition(0.3);
+        sleep(500);
+        FlickRight.setPosition(0.035);
+        sleep(500);
+
+        //reshoot the left
+        FlickLeft.setPosition(0.575);
+        sleep(500);
+        FlickLeft.setPosition(0.835);
+        sleep(500);
 
 
         //stop the shooter

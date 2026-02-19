@@ -98,8 +98,8 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        FlickLeft.setPosition(0.85);
-        FlickRight.setPosition(0.05);
+        FlickLeft.setPosition(0.835);
+        FlickRight.setPosition(0.035);
 
 
 
@@ -170,23 +170,23 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
             //move RIGHT servo to the rotated position like 90 degrees prob
 
 
-            FlickRight.setPosition(0.35);
-            assert true;
+            FlickRight.setPosition(0.3);
+
         }else{
             //move RIGHT servo back to original position
-            FlickRight.setPosition(0.05);
-            assert true;
+            FlickRight.setPosition(0.035);
+
         }
 
         if ((gamepad2.left_bumper) || (gamepad1.left_bumper)){
             //move LEFT servo to the rotated position like 90 degrees prob
 
 
-            FlickLeft.setPosition(0.55);
+            FlickLeft.setPosition(0.575);
 
         }else{
             //move LEFT servo back to original position
-            FlickLeft.setPosition(0.85);
+            FlickLeft.setPosition(0.835);
 
         }
 

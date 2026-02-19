@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.hardcodeAutons;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -54,9 +54,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="red-far 2ball", group="Robot")
+@Autonomous(name="blue-far 2ball", group="Robot")
 
-public class redSideFar extends LinearOpMode {
+public class blueSideFar extends LinearOpMode {
 
     DcMotor frontLeftDrive;
     DcMotor frontRightDrive;
@@ -119,7 +119,7 @@ public class redSideFar extends LinearOpMode {
 
 
 
-        //drive forward for .5 seconds, and then stop for 1 se ond
+        //drive backward for 2.5 seconds, and then stop for 1 se ond
         backLeftDrive.setPower(.25);
         backRightDrive.setPower(.25);
         frontLeftDrive.setPower(.25);
@@ -131,11 +131,11 @@ public class redSideFar extends LinearOpMode {
         backRightDrive.setPower(0);
         sleep(1000);
 
-        //turn a bit right
-        frontLeftDrive.setPower(0.25);
-        frontRightDrive.setPower(-0.25);
-        backLeftDrive.setPower(0.25);
-        backRightDrive.setPower(-0.25);
+        //turn a bit left
+        frontLeftDrive.setPower(-0.25);
+        frontRightDrive.setPower(0.25);
+        backLeftDrive.setPower(-0.25);
+        backRightDrive.setPower(0.25);
         sleep(250);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
@@ -160,6 +160,9 @@ public class redSideFar extends LinearOpMode {
         FlickLeft.setPosition(0.85);
         sleep(1500);
 
+        intake.setPower(-1);
+        sleep(1000);
+        intake.setPower(0);
 
         //stop the shooter
         shooterLeft.setPower(0);
@@ -167,10 +170,10 @@ public class redSideFar extends LinearOpMode {
         sleep(2000);
 
         //turns back, stops, and waits 1 second
-        frontLeftDrive.setPower(-0.25);
-        backLeftDrive.setPower(-0.25);
-        frontRightDrive.setPower(0.25);
-        backRightDrive.setPower(0.25);
+        frontLeftDrive.setPower(0.25);
+        backLeftDrive.setPower(0.25);
+        frontRightDrive.setPower(-0.25);
+        backRightDrive.setPower(-0.25);
         sleep(250);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
@@ -180,10 +183,10 @@ public class redSideFar extends LinearOpMode {
 
 
         //drives 2 seconds forward, and stops
-        frontLeftDrive.setPower(0.25);
-        backLeftDrive.setPower(-0.25);
-        frontRightDrive.setPower(-0.25);
-        backRightDrive.setPower(0.25);
+        frontLeftDrive.setPower(-0.25);
+        backLeftDrive.setPower(0.25);
+        frontRightDrive.setPower(0.25);
+        backRightDrive.setPower(-0.25);
         sleep(3000);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);

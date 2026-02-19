@@ -13,14 +13,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(5); // PLACEHOLDER
+            .mass(11.22);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1) // TUNE
-            .rightFrontMotorName("rf")
-            .rightRearMotorName("rr")
-            .leftRearMotorName("lr")
-            .leftFrontMotorName("lf")
+            .rightFrontMotorName("driveRightFront")
+            .rightRearMotorName("driveRightRear")
+            .leftRearMotorName("driveLeftRear")
+            .leftFrontMotorName("driveLeftFront")
             .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
@@ -29,13 +29,13 @@ public class Constants {
     public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
             .robotWidth(18)
             .robotLength(17)
-            .forwardTicksToInches(1) // PLACEHOLDER
-            .strafeTicksToInches(1) // PLACEHOLDER
-            .turnTicksToInches(1) // PLACEHOLDER
-            .rightFrontMotorName("rf")
-            .rightRearMotorName("rr")
-            .leftRearMotorName("lr")
-            .leftFrontMotorName("lf")
+            .forwardTicksToInches(2.63645)
+            .strafeTicksToInches(-2.50827)
+            .turnTicksToInches(-1.84799)
+            .rightFrontMotorName("driveRightFront")
+            .rightRearMotorName("driveRightRear")
+            .leftRearMotorName("driveLeftRear")
+            .leftFrontMotorName("driveLeftFront")
             .leftFrontEncoderDirection(Encoder.FORWARD)
             .leftRearEncoderDirection(Encoder.FORWARD)
             .rightFrontEncoderDirection(Encoder.FORWARD)
