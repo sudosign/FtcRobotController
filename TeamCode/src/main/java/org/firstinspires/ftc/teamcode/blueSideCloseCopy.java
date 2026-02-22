@@ -177,7 +177,7 @@ public class blueSideCloseCopy extends LinearOpMode {
         backLeftDrive.setPower(-0.25);
         frontRightDrive.setPower(0.25);
         backRightDrive.setPower(0.25);
-        while (Math.abs(angle-targetAngle)<tolerance){
+        while (Math.abs(angle-targetAngle)>tolerance){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
 
@@ -249,7 +249,7 @@ public class blueSideCloseCopy extends LinearOpMode {
         backLeftDrive.setPower(-0.25);
         backRightDrive.setPower(-0.25);
 
-        while (Math.abs(angle-targetAngle)<tolerance){
+        while (Math.abs(angle-targetAngle)>tolerance){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
         frontLeftDrive.setPower(0);
@@ -288,7 +288,7 @@ public class blueSideCloseCopy extends LinearOpMode {
         frontRightDrive.setPower(0.25);
         backRightDrive.setPower(0.25);
         // 1.570795 is 90 degrees
-        while (Math.abs(angle-targetAngle)<tolerance){
+        while (Math.abs(angle-targetAngle)>tolerance){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
         frontLeftDrive.setPower(0);
@@ -349,7 +349,7 @@ public class blueSideCloseCopy extends LinearOpMode {
         frontRightDrive.setPower(-0.25);
         backRightDrive.setPower(-0.25);
         // 0.7853975 is 45 degrees
-        while (Math.abs(angle-targetAngle)<tolerance){
+        while (Math.abs(angle-targetAngle)>tolerance){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
         frontLeftDrive.setPower(0);
@@ -417,7 +417,7 @@ public class blueSideCloseCopy extends LinearOpMode {
         frontRightDrive.setPower(0.25);
         backRightDrive.setPower(0.25);
         // 0.7853975 is 45 degrees
-        while (Math.abs(angle-targetAngle)<tolerance){
+        while (Math.abs(angle-targetAngle)>tolerance){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
         frontLeftDrive.setPower(0);
