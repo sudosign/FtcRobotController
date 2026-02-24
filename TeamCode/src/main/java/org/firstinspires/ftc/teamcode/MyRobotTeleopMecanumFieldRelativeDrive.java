@@ -98,8 +98,8 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        FlickLeft.setPosition(0.835);
-        FlickRight.setPosition(0.035);
+        FlickLeft.setPosition(0.87);
+        FlickRight.setPosition(0.05);
 
 
 
@@ -174,7 +174,7 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
         }else{
             //move RIGHT servo back to original position
-            FlickRight.setPosition(0.035);
+            FlickRight.setPosition(0.05);
 
         }
 
@@ -186,7 +186,7 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
         }else{
             //move LEFT servo back to original position
-            FlickLeft.setPosition(0.835);
+            FlickLeft.setPosition(0.87);
 
         }
 

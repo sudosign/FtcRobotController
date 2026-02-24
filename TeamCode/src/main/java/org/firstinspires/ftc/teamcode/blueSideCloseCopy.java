@@ -113,8 +113,8 @@ public class blueSideCloseCopy extends LinearOpMode {
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        FlickLeft.setPosition(0.835);
-        FlickRight.setPosition(0.035);
+        FlickLeft.setPosition(0.87);
+        FlickRight.setPosition(0.05);
 
         imu = hardwareMap.get(IMU.class, "imu");
         // This needs to be changed to match the orientation on your robot
@@ -154,7 +154,7 @@ public class blueSideCloseCopy extends LinearOpMode {
         backRightDrive.setPower(-.5);
         frontLeftDrive.setPower(-.5);
         frontRightDrive.setPower(-.5);
-        sleep(800);
+        sleep(1000);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
@@ -177,7 +177,7 @@ public class blueSideCloseCopy extends LinearOpMode {
         backLeftDrive.setPower(-0.25);
         frontRightDrive.setPower(0.25);
         backRightDrive.setPower(0.25);
-        while (Math.abs(angle-targetAngle)>tolerance){
+        while ((targetAngle-angle)>tolerance){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
 
@@ -192,7 +192,7 @@ public class blueSideCloseCopy extends LinearOpMode {
         backLeftDrive.setPower(-0.5);
         frontRightDrive.setPower(-0.5);
         backRightDrive.setPower(-0.5);
-        sleep(600);
+        sleep(400);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
@@ -206,11 +206,11 @@ public class blueSideCloseCopy extends LinearOpMode {
         FlickRight.setPosition(0.3);
         sleep(500);
         //reset right and shoot left
-        FlickRight.setPosition(0.035);
+        FlickRight.setPosition(0.05);
         FlickLeft.setPosition(0.575);
         sleep(500);
         //reset left
-        FlickLeft.setPosition(0.835);
+        FlickLeft.setPosition(0.87);
         sleep(500);
         //push third ball
         intake.setPower(-1);
@@ -221,11 +221,22 @@ public class blueSideCloseCopy extends LinearOpMode {
         FlickLeft.setPosition(0.575);
         sleep(500);
         //reset both
-        FlickLeft.setPosition(0.835);
-        FlickRight.setPosition(0.035);
+        FlickLeft.setPosition(0.87);
+        FlickRight.setPosition(0.05);
         //stop the shooter
         shooterLeft.setPower(0);
         shooterRight.setPower(0);
+        sleep(500);
+
+        frontLeftDrive.setPower(-0.5);
+        backLeftDrive.setPower(-0.5);
+        frontRightDrive.setPower(-0.5);
+        backRightDrive.setPower(-0.5);
+        sleep(400);
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
         sleep(500);
 
 
@@ -249,14 +260,14 @@ public class blueSideCloseCopy extends LinearOpMode {
         backLeftDrive.setPower(-0.25);
         backRightDrive.setPower(-0.25);
 
-        while (Math.abs(angle-targetAngle)>tolerance){
+        while ((angle-targetAngle)>tolerance){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
         backRightDrive.setPower(0);
-        sleep(500);
+        sleep(1000);
 
 
 
@@ -265,7 +276,7 @@ public class blueSideCloseCopy extends LinearOpMode {
         backLeftDrive.setPower(-0.5);
         frontRightDrive.setPower(-0.5);
         backRightDrive.setPower(-0.5);
-        sleep(1000);
+        sleep(800);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
@@ -280,7 +291,7 @@ public class blueSideCloseCopy extends LinearOpMode {
         backLeftDrive.setPower(-0.5);
         frontRightDrive.setPower(0.5);
         backRightDrive.setPower(0.5);
-        while (Math.abs(angle-startAngle)<1.2){
+        while (Math.abs(angle-startAngle)<1){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
         frontLeftDrive.setPower(-0.25);
@@ -288,7 +299,7 @@ public class blueSideCloseCopy extends LinearOpMode {
         frontRightDrive.setPower(0.25);
         backRightDrive.setPower(0.25);
         // 1.570795 is 90 degrees
-        while (Math.abs(angle-targetAngle)>tolerance){
+        while ((targetAngle-angle)>tolerance){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
         frontLeftDrive.setPower(0);
@@ -349,7 +360,7 @@ public class blueSideCloseCopy extends LinearOpMode {
         frontRightDrive.setPower(-0.25);
         backRightDrive.setPower(-0.25);
         // 0.7853975 is 45 degrees
-        while (Math.abs(angle-targetAngle)>tolerance){
+        while ((targetAngle-angle)>tolerance){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
         frontLeftDrive.setPower(0);
@@ -358,10 +369,10 @@ public class blueSideCloseCopy extends LinearOpMode {
         backRightDrive.setPower(0);
         sleep(500);
 
-        frontLeftDrive.setPower(0.5);
-        backLeftDrive.setPower(0.5);
-        frontRightDrive.setPower(0.5);
-        backRightDrive.setPower(0.5);
+        frontLeftDrive.setPower(-0.5);
+        backLeftDrive.setPower(-0.5);
+        frontRightDrive.setPower(-0.5);
+        backRightDrive.setPower(-0.5);
         sleep(200);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
@@ -377,11 +388,11 @@ public class blueSideCloseCopy extends LinearOpMode {
         FlickRight.setPosition(0.3);
         sleep(500);
         //reset right and shoot left
-        FlickRight.setPosition(0.035);
+        FlickRight.setPosition(0.05);
         FlickLeft.setPosition(0.575);
         sleep(500);
         //reset left
-        FlickLeft.setPosition(0.835);
+        FlickLeft.setPosition(0.87);
         sleep(500);
         //push third ball
         intake.setPower(-1);
@@ -392,8 +403,8 @@ public class blueSideCloseCopy extends LinearOpMode {
         FlickLeft.setPosition(0.575);
         sleep(500);
         //reset both
-        FlickLeft.setPosition(0.835);
-        FlickRight.setPosition(0.035);
+        FlickLeft.setPosition(0.87);
+        FlickRight.setPosition(0.05);
         //stop the shooter
         shooterLeft.setPower(0);
         shooterRight.setPower(0);
@@ -417,7 +428,7 @@ public class blueSideCloseCopy extends LinearOpMode {
         frontRightDrive.setPower(0.25);
         backRightDrive.setPower(0.25);
         // 0.7853975 is 45 degrees
-        while (Math.abs(angle-targetAngle)>tolerance){
+        while ((targetAngle-angle)>tolerance){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
         frontLeftDrive.setPower(0);
@@ -432,15 +443,15 @@ public class blueSideCloseCopy extends LinearOpMode {
         frontRightDrive.setPower(-0.5);
         backRightDrive.setPower(0.5);
         sleep(1000);
+        frontLeftDrive.setPower(-0.25);
+        frontRightDrive.setPower(-0.25);
+        backLeftDrive.setPower(-0.25);
+        backRightDrive.setPower(-0.25);
+        sleep(1000);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
         backRightDrive.setPower(0);
-        sleep(250);
 
-
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);
     }
 }
