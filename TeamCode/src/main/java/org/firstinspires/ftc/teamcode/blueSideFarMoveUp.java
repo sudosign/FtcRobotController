@@ -29,11 +29,15 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 /*
  * This OpMode illustrates the concept of driving a path based on time.
@@ -54,9 +58,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="blue-far 2ball", group="Robot")
+@Autonomous(name="blue-far moveup 3ball", group="Robot")
 
-public class blueSideFar extends LinearOpMode {
+public class blueSideFarMoveUp extends LinearOpMode {
 
     DcMotor frontLeftDrive;
     DcMotor frontRightDrive;
@@ -67,6 +71,8 @@ public class blueSideFar extends LinearOpMode {
     DcMotor shooterRight;
     Servo FlickLeft;
     Servo FlickRight;
+
+    IMU imu;
 
     /* Declare OpMode members. */
 
@@ -98,8 +104,24 @@ public class blueSideFar extends LinearOpMode {
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
+        frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         FlickLeft.setPosition(0.85);
         FlickRight.setPosition(0.05);
+
+        imu = hardwareMap.get(IMU.class, "imu");
+        // This needs to be changed to match the orientation on your robot
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection =
+                RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD;
+        RevHubOrientationOnRobot.UsbFacingDirection usbDirection =
+                RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
+
+        RevHubOrientationOnRobot orientationOnRobot = new
+                RevHubOrientationOnRobot(logoDirection, usbDirection);
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -116,37 +138,56 @@ public class blueSideFar extends LinearOpMode {
 
         // Wait for the game to start (driver presses START)
         waitForStart();
+        double angle=0;
+        double targetAngle=0;
+        double startAngle=0;
+        double tolerance=0.02;
 
+        sleep(20000);
 
 
         //drive backward for 2.5 seconds, and then stop for 1 se ond
-        backLeftDrive.setPower(.25);
-        backRightDrive.setPower(.25);
-        frontLeftDrive.setPower(.25);
-        frontRightDrive.setPower(.25);
+        backLeftDrive.setPower(1);
+        backRightDrive.setPower(1);
+        frontLeftDrive.setPower(1);
+        frontRightDrive.setPower(1);
+        sleep(1500);
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
         sleep(500);
-        frontLeftDrive.setPower(0);
-        frontRightDrive.setPower(0);
-        backLeftDrive.setPower(0);
-        backRightDrive.setPower(0);
-        sleep(1000);
 
-        //turn a bit left
+        //turn left 45 degrees
+        angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        startAngle=angle;
+        targetAngle=targetAngle-0.7853975;
+        frontLeftDrive.setPower(-0.5);
+        backLeftDrive.setPower(-0.5);
+        frontRightDrive.setPower(0.5);
+        backRightDrive.setPower(0.5);
+        // 0.7853975 is 45 degrees
+        while (Math.abs(angle-startAngle)<.5){
+            angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        }
         frontLeftDrive.setPower(-0.25);
-        frontRightDrive.setPower(0.25);
         backLeftDrive.setPower(-0.25);
+        frontRightDrive.setPower(0.25);
         backRightDrive.setPower(0.25);
-        sleep(250);
+        while ((targetAngle-angle)>tolerance){
+            angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        }
+
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
         backRightDrive.setPower(0);
-        sleep(1000);
+        sleep(250);
 
         //turn on shooters, and wait 3 seconds for it to spin up
         //turn on shooters, and wait 2 seconds for it to spin up
-        shooterRight.setPower(0.85);
-        shooterLeft.setPower(0.85);
+        shooterRight.setPower(0.6);
+        shooterLeft.setPower(0.6);
         sleep(2000);
         //shoot the right
         FlickRight.setPosition(0.3);
@@ -175,25 +216,13 @@ public class blueSideFar extends LinearOpMode {
         shooterRight.setPower(0);
         sleep(500);
 
-        //turns back, stops, and waits 1 second
-        frontLeftDrive.setPower(0.25);
-        backLeftDrive.setPower(0.25);
-        frontRightDrive.setPower(-0.25);
-        backRightDrive.setPower(-0.25);
-        sleep(250);
-        frontLeftDrive.setPower(0);
-        frontRightDrive.setPower(0);
-        backLeftDrive.setPower(0);
-        backRightDrive.setPower(0);
-        sleep(1000);
-
 
         //drives 2 seconds forward, and stops
-        frontLeftDrive.setPower(-0.25);
-        backLeftDrive.setPower(0.25);
-        frontRightDrive.setPower(0.25);
-        backRightDrive.setPower(-0.25);
-        sleep(3000);
+        frontLeftDrive.setPower(1);
+        backLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backRightDrive.setPower(1);
+        sleep(1000);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
@@ -205,6 +234,5 @@ public class blueSideFar extends LinearOpMode {
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
-        sleep(1000);
     }
 }

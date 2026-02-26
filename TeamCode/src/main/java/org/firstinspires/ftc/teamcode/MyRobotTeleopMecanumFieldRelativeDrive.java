@@ -28,7 +28,10 @@
  */
 package org.firstinspires.ftc.teamcode;
 
+import android.hardware.Sensor;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -37,6 +40,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 /*
  * This OpMode illustrates how to program your robot to drive field relative.  This means
  * that the robot drives the direction you push the joystick regardless of the current orientation
@@ -65,6 +70,8 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
     Servo FlickLeft;
     Servo FlickRight;
 
+    DistanceSensor distanceSensor;
+
     // This declares the IMU needed to get the current direction the robot is facing
     IMU imu;
 
@@ -84,6 +91,8 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
         FlickLeft = hardwareMap.get(Servo.class, "FlickLeft" );
         FlickRight = hardwareMap.get(Servo.class, "FlickRight");
+
+        distanceSensor=hardwareMap.get(DistanceSensor.class, "distanceSensor");
 
         // We set the left motors in reverse which is needed for drive trains where the left
         // motors are opposite to the right ones.
@@ -213,6 +222,8 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         telemetry.addLine("");
         telemetry.addLine("Y or DPAD UP will toggle the intake");
         telemetry.addLine("Use Bumpers to toggle left and right shooters");
+        telemetry.addLine(String.valueOf(distanceSensor.getDistance(DistanceUnit.CM)));
+
     }
 
 
