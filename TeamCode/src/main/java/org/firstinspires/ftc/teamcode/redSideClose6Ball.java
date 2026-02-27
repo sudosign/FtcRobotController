@@ -58,9 +58,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="blue-far 3ball (20s wait)", group="Robot")
+@Autonomous(name="red-close 6 ball", group="Robot")
 
-public class blueSideFarMoveUp extends LinearOpMode {
+public class redSideClose6Ball extends LinearOpMode {
 
     DcMotor frontLeftDrive;
     DcMotor frontRightDrive;
@@ -80,8 +80,7 @@ public class blueSideFarMoveUp extends LinearOpMode {
     private ElapsedTime     runtime = new ElapsedTime();
 
 
-    static final double     FORWARD_SPEED = 0.6;
-    static final double     TURN_SPEED    = 0.5;
+
 
     @Override
     public void runOpMode() {
@@ -104,12 +103,17 @@ public class blueSideFarMoveUp extends LinearOpMode {
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
+        frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        FlickLeft.setPosition(0.85);
+        FlickLeft.setPosition(0.87);
         FlickRight.setPosition(0.05);
 
         imu = hardwareMap.get(IMU.class, "imu");
@@ -143,38 +147,37 @@ public class blueSideFarMoveUp extends LinearOpMode {
         double startAngle=0;
         double tolerance=0.02;
 
-        sleep(20000);
 
 
         //drive backward for 2.5 seconds, and then stop for 1 se ond
-        backLeftDrive.setPower(1);
-        backRightDrive.setPower(1);
-        frontLeftDrive.setPower(1);
-        frontRightDrive.setPower(1);
-        sleep(1500);
+        backLeftDrive.setPower(-.5);
+        backRightDrive.setPower(-.5);
+        frontLeftDrive.setPower(-.5);
+        frontRightDrive.setPower(-.5);
+        sleep(1000);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
         backRightDrive.setPower(0);
-        sleep(500);
+        sleep(250);
 
-        //turn left 45 degrees
+        //turn right 45 degrees
         angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         startAngle=angle;
-        targetAngle=targetAngle-0.7853975;
-        frontLeftDrive.setPower(-0.5);
-        backLeftDrive.setPower(-0.5);
-        frontRightDrive.setPower(0.5);
-        backRightDrive.setPower(0.5);
+        targetAngle=targetAngle+0.7853975;
+        frontLeftDrive.setPower(0.5);
+        backLeftDrive.setPower(0.5);
+        frontRightDrive.setPower(-0.5);
+        backRightDrive.setPower(-0.5);
         // 0.7853975 is 45 degrees
         while (Math.abs(angle-startAngle)<.5){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
-        frontLeftDrive.setPower(-0.25);
-        backLeftDrive.setPower(-0.25);
-        frontRightDrive.setPower(0.25);
-        backRightDrive.setPower(0.25);
-        while ((targetAngle-angle)>tolerance){
+        frontLeftDrive.setPower(0.25);
+        backLeftDrive.setPower(0.25);
+        frontRightDrive.setPower(-0.25);
+        backRightDrive.setPower(-0.25);
+        while ((angle-targetAngle)>tolerance){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
 
@@ -184,7 +187,17 @@ public class blueSideFarMoveUp extends LinearOpMode {
         backRightDrive.setPower(0);
         sleep(250);
 
-        //turn on shooters, and wait 3 seconds for it to spin up
+        //drives 1 second backward, and stops
+        frontLeftDrive.setPower(-0.5);
+        backLeftDrive.setPower(-0.5);
+        frontRightDrive.setPower(-0.5);
+        backRightDrive.setPower(-0.5);
+        sleep(400);
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+
         //turn on shooters, and wait 2 seconds for it to spin up
         shooterRight.setPower(0.6);
         shooterLeft.setPower(0.6);
@@ -216,23 +229,208 @@ public class blueSideFarMoveUp extends LinearOpMode {
         shooterRight.setPower(0);
         sleep(500);
 
+        frontLeftDrive.setPower(-0.5);
+        backLeftDrive.setPower(-0.5);
+        frontRightDrive.setPower(-0.5);
+        backRightDrive.setPower(-0.5);
+        sleep(400);
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+        sleep(500);
+
+
+
+
+        //turn right 45 degrees
+        angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        startAngle=angle;
+        frontLeftDrive.setPower(0.5);
+        backLeftDrive.setPower(0.5);
+        frontRightDrive.setPower(-0.5);
+        backRightDrive.setPower(-0.5);
+        // 0.7853975 is 45 degrees
+        targetAngle=targetAngle+0.8053975;
+        while (Math.abs(angle-startAngle)<.5){
+            angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        }
+
+        frontLeftDrive.setPower(0.25);
+        frontRightDrive.setPower(0.25);
+        backLeftDrive.setPower(-0.25);
+        backRightDrive.setPower(-0.25);
+
+        while ((angle-targetAngle)>tolerance){
+            angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        }
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+        sleep(1000);
+
+
+
+        //strafes left for .6 seconds, and stops
+        frontLeftDrive.setPower(0.5);
+        backLeftDrive.setPower(-0.5);
+        frontRightDrive.setPower(-0.5);
+        backRightDrive.setPower(0.5);
+        sleep(800);
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+        sleep(500);
+
+
+
+
+        //intake on
+        intake.setPower(-1);
+        frontLeftDrive.setPower(0.4);
+        backLeftDrive.setPower(0.4);
+        frontRightDrive.setPower(0.4);
+        backRightDrive.setPower(0.4);
+        sleep(1500);
+        frontLeftDrive.setPower(-0.4);
+        frontRightDrive.setPower(-.4);
+        backLeftDrive.setPower(-0.4);
+        backRightDrive.setPower(-0.4);
+        sleep(900);
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+        sleep(500);
+        intake.setPower(0);
+
 
         //drives 2 seconds forward, and stops
-        frontLeftDrive.setPower(1);
-        backLeftDrive.setPower(0);
+        //strafe left
+        frontLeftDrive.setPower(-0.5);
+        backLeftDrive.setPower(0.5);
+        frontRightDrive.setPower(0.5);
+        backRightDrive.setPower(-0.5);
+        sleep(1200);
+        frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
-        backRightDrive.setPower(1);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+        sleep(250);
+
+
+        //turn left 45 degrees
+        angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        startAngle=angle;
+        targetAngle=targetAngle-0.8053975;
+        frontLeftDrive.setPower(-0.5);
+        backLeftDrive.setPower(-0.5);
+        frontRightDrive.setPower(0.5);
+        backRightDrive.setPower(0.5);
+        while (Math.abs(angle-startAngle)<.5){
+            angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        }
+
+        frontLeftDrive.setPower(-0.25);
+        backLeftDrive.setPower(-0.25);
+        frontRightDrive.setPower(0.25);
+        backRightDrive.setPower(0.25);
+        // 0.7853975 is 45 degrees
+        while ((targetAngle-angle)>tolerance){
+            angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        }
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+        sleep(500);
+
+        frontLeftDrive.setPower(-0.5);
+        backLeftDrive.setPower(-0.5);
+        frontRightDrive.setPower(-0.5);
+        backRightDrive.setPower(-0.5);
+        sleep(200);
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+        sleep(300);
+
+        //turn on shooters, and wait 2 seconds for it to spin up
+        shooterRight.setPower(0.6);
+        shooterLeft.setPower(0.6);
+        sleep(2000);
+        //shoot the right
+        FlickRight.setPosition(0.3);
+        sleep(1000);
+        //reset right and shoot left
+        FlickRight.setPosition(0.05);
+        FlickLeft.setPosition(0.575);
+        sleep(500);
+        //reset left
+        FlickLeft.setPosition(0.87);
+        sleep(500);
+        //push third ball
+        intake.setPower(-1);
+        sleep(500);
+        intake.setPower(0);
+        //shoot both
+        FlickRight.setPosition(0.3);
+        sleep(500);
+        FlickRight.setPosition(0.05);
+        FlickLeft.setPosition(0.575);
+        sleep(500);
+        FlickLeft.setPosition(0.87);
+
+        //stop the shooter
+        shooterLeft.setPower(0);
+        shooterRight.setPower(0);
+        sleep(500);
+
+        //45 degrees right
+        angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        startAngle=angle;
+        targetAngle=targetAngle+0.7853975;
+        frontLeftDrive.setPower(0.5);
+        backLeftDrive.setPower(0.5);
+        frontRightDrive.setPower(-0.5);
+        backRightDrive.setPower(-0.5);
+
+        while (Math.abs(angle-startAngle)<.5){
+            angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        }
+
+        frontLeftDrive.setPower(0.25);
+        backLeftDrive.setPower(0.25);
+        frontRightDrive.setPower(-0.25);
+        backRightDrive.setPower(-0.25);
+        // 0.7853975 is 45 degrees
+        while ((angle-targetAngle)>tolerance){
+            angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        }
+        frontLeftDrive.setPower(0);
+        frontRightDrive.setPower(0);
+        backLeftDrive.setPower(0);
+        backRightDrive.setPower(0);
+        sleep(250);
+
+        //strafe right
+        frontLeftDrive.setPower(-0.5);
+        backLeftDrive.setPower(0.5);
+        frontRightDrive.setPower(0.5);
+        backRightDrive.setPower(-0.5);
+        sleep(1000);
+        frontLeftDrive.setPower(-0.25);
+        frontRightDrive.setPower(-0.25);
+        backLeftDrive.setPower(-0.25);
+        backRightDrive.setPower(-0.25);
         sleep(1000);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
         backRightDrive.setPower(0);
 
-
-
-
-
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
     }
 }

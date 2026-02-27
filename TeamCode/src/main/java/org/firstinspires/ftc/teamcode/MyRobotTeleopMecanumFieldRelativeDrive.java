@@ -257,7 +257,7 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         double backLeftPower = -forward - right + rotate;
 
         double maxPower = 1.0;
-        double maxSpeed=0.5;
+        double maxSpeed=1.0;
 
         if (gamepad1.right_trigger>0.5) {
             maxSpeed=0.5;

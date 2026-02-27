@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "blueClose", group = "Comp")
+@Autonomous(name = "blueClose (DO NOT USE)", group = "Comp")
 @Configurable
 public class blueClose extends OpMode {
     private TelemetryManager panelsTelemetry;

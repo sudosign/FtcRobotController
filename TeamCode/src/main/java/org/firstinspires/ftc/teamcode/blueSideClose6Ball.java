@@ -58,9 +58,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="blue-close 6 ball (do not use)", group="Robot")
+@Autonomous(name="blue-close 6 ball", group="Robot")
 
-public class blueSideCloseCopy extends LinearOpMode {
+public class blueSideClose6Ball extends LinearOpMode {
 
     DcMotor frontLeftDrive;
     DcMotor frontRightDrive;
@@ -321,7 +321,7 @@ public class blueSideCloseCopy extends LinearOpMode {
         sleep(250);
 
 
-        //turn left 45 degrees
+        //turn right 45 degrees
         angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         startAngle=angle;
         targetAngle=targetAngle+0.8053975;
