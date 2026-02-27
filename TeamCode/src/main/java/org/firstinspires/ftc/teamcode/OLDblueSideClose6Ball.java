@@ -58,9 +58,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="blue-close 6 ball (fixing angles?)", group="Robot")
+@Autonomous(name="(DO NOT USE) old 6 ball", group="Robot")
 
-public class blueSideClose6BallFIXINGANGLES extends LinearOpMode {
+public class OLDblueSideClose6Ball extends LinearOpMode {
 
     DcMotor frontLeftDrive;
     DcMotor frontRightDrive;
@@ -145,7 +145,7 @@ public class blueSideClose6BallFIXINGANGLES extends LinearOpMode {
         double angle=0;
         double targetAngle=0;
         double startAngle=0;
-        double tolerance=0.1;
+        double tolerance=0.02;
 
 
 
@@ -164,13 +164,13 @@ public class blueSideClose6BallFIXINGANGLES extends LinearOpMode {
         //turn left 45 degrees
         angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         startAngle=angle;
-        targetAngle=targetAngle+0.7853975;
-        frontLeftDrive.setPower(-0.4);
-        backLeftDrive.setPower(-0.4);
-        frontRightDrive.setPower(0.4);
-        backRightDrive.setPower(0.4);
+        targetAngle=targetAngle-0.7853975;
+        frontLeftDrive.setPower(-0.5);
+        backLeftDrive.setPower(-0.5);
+        frontRightDrive.setPower(0.5);
+        backRightDrive.setPower(0.5);
         // 0.7853975 is 45 degrees
-        while (Math.abs(angle-startAngle)<.3){
+        while (Math.abs(angle-startAngle)<.5){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
         frontLeftDrive.setPower(-0.25);
@@ -246,13 +246,13 @@ public class blueSideClose6BallFIXINGANGLES extends LinearOpMode {
         //turn left 45 degrees
         angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         startAngle=angle;
-        frontLeftDrive.setPower(-0.4);
-        backLeftDrive.setPower(-0.4);
-        frontRightDrive.setPower(0.4);
-        backRightDrive.setPower(0.4);
+        frontLeftDrive.setPower(-0.5);
+        backLeftDrive.setPower(-0.5);
+        frontRightDrive.setPower(0.5);
+        backRightDrive.setPower(0.5);
         // 0.7853975 is 45 degrees
-        targetAngle=targetAngle+0.7853975;
-        while (Math.abs(angle-startAngle)<.3){
+        targetAngle=targetAngle-0.8053975;
+        while (Math.abs(angle-startAngle)<.5){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
 
@@ -324,12 +324,12 @@ public class blueSideClose6BallFIXINGANGLES extends LinearOpMode {
         //turn right 45 degrees
         angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         startAngle=angle;
-        targetAngle=targetAngle-0.7853975;
-        frontLeftDrive.setPower(0.4);
-        backLeftDrive.setPower(0.4);
-        frontRightDrive.setPower(-0.4);
-        backRightDrive.setPower(-0.4);
-        while (Math.abs(angle-startAngle)<.3){
+        targetAngle=targetAngle+0.8053975;
+        frontLeftDrive.setPower(0.5);
+        backLeftDrive.setPower(0.5);
+        frontRightDrive.setPower(-0.5);
+        backRightDrive.setPower(-0.5);
+        while (Math.abs(angle-startAngle)<.5){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
 
@@ -338,7 +338,7 @@ public class blueSideClose6BallFIXINGANGLES extends LinearOpMode {
         frontRightDrive.setPower(-0.25);
         backRightDrive.setPower(-0.25);
         // 0.7853975 is 45 degrees
-        while ((angle-targetAngle)>tolerance){
+        while ((targetAngle-angle)>tolerance){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
         frontLeftDrive.setPower(0);
@@ -392,13 +392,13 @@ public class blueSideClose6BallFIXINGANGLES extends LinearOpMode {
         //45 degrees left
         angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         startAngle=angle;
-        targetAngle=targetAngle+0.7853975;
-        frontLeftDrive.setPower(-0.4);
-        backLeftDrive.setPower(-0.4);
-        frontRightDrive.setPower(0.4);
-        backRightDrive.setPower(0.4);
+        targetAngle=targetAngle-0.7853975;
+        frontLeftDrive.setPower(-0.5);
+        backLeftDrive.setPower(-0.5);
+        frontRightDrive.setPower(0.5);
+        backRightDrive.setPower(0.5);
 
-        while (Math.abs(angle-startAngle)<.3){
+        while (Math.abs(angle-startAngle)<.5){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
 

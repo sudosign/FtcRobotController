@@ -109,7 +109,7 @@ public class blueSideFarMoveUp extends LinearOpMode {
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        FlickLeft.setPosition(0.85);
+        FlickLeft.setPosition(0.87);
         FlickRight.setPosition(0.05);
 
         imu = hardwareMap.get(IMU.class, "imu");
@@ -122,6 +122,8 @@ public class blueSideFarMoveUp extends LinearOpMode {
         RevHubOrientationOnRobot orientationOnRobot = new
                 RevHubOrientationOnRobot(logoDirection, usbDirection);
         imu.initialize(new IMU.Parameters(orientationOnRobot));
+
+        imu.resetYaw();
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -161,13 +163,13 @@ public class blueSideFarMoveUp extends LinearOpMode {
         //turn left 45 degrees
         angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         startAngle=angle;
-        targetAngle=targetAngle-0.7853975;
-        frontLeftDrive.setPower(-0.5);
-        backLeftDrive.setPower(-0.5);
-        frontRightDrive.setPower(0.5);
-        backRightDrive.setPower(0.5);
+        targetAngle=targetAngle+0.7853975;
+        frontLeftDrive.setPower(-0.4);
+        backLeftDrive.setPower(-0.4);
+        frontRightDrive.setPower(0.4);
+        backRightDrive.setPower(0.4);
         // 0.7853975 is 45 degrees
-        while (Math.abs(angle-startAngle)<.5){
+        while (Math.abs(angle-startAngle)<.3){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
         frontLeftDrive.setPower(-0.25);

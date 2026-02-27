@@ -132,7 +132,7 @@ public class redSideClose6Ball extends LinearOpMode {
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
         // backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         // frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-
+        imu.resetYaw();
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
@@ -145,7 +145,7 @@ public class redSideClose6Ball extends LinearOpMode {
         double angle=0;
         double targetAngle=0;
         double startAngle=0;
-        double tolerance=0.02;
+        double tolerance=0.1;
 
 
 
@@ -164,13 +164,13 @@ public class redSideClose6Ball extends LinearOpMode {
         //turn right 45 degrees
         angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         startAngle=angle;
-        targetAngle=targetAngle+0.7853975;
-        frontLeftDrive.setPower(0.5);
-        backLeftDrive.setPower(0.5);
-        frontRightDrive.setPower(-0.5);
-        backRightDrive.setPower(-0.5);
+        targetAngle=targetAngle-0.7853975;
+        frontLeftDrive.setPower(0.4);
+        backLeftDrive.setPower(0.4);
+        frontRightDrive.setPower(-0.4);
+        backRightDrive.setPower(-0.4);
         // 0.7853975 is 45 degrees
-        while (Math.abs(angle-startAngle)<.5){
+        while (Math.abs(angle-startAngle)<.3){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
         frontLeftDrive.setPower(0.25);
@@ -233,7 +233,7 @@ public class redSideClose6Ball extends LinearOpMode {
         backLeftDrive.setPower(-0.5);
         frontRightDrive.setPower(-0.5);
         backRightDrive.setPower(-0.5);
-        sleep(400);
+        sleep(1000);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
@@ -246,13 +246,13 @@ public class redSideClose6Ball extends LinearOpMode {
         //turn right 45 degrees
         angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         startAngle=angle;
-        frontLeftDrive.setPower(0.5);
-        backLeftDrive.setPower(0.5);
-        frontRightDrive.setPower(-0.5);
-        backRightDrive.setPower(-0.5);
+        frontLeftDrive.setPower(0.25);
+        backLeftDrive.setPower(0.25);
+        frontRightDrive.setPower(-0.25);
+        backRightDrive.setPower(-0.25);
         // 0.7853975 is 45 degrees
-        targetAngle=targetAngle+0.8053975;
-        while (Math.abs(angle-startAngle)<.5){
+        targetAngle=targetAngle-0.7853975;
+        while (Math.abs(angle-startAngle)<.3){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
 
@@ -272,17 +272,7 @@ public class redSideClose6Ball extends LinearOpMode {
 
 
 
-        //strafes left for .6 seconds, and stops
-        frontLeftDrive.setPower(0.5);
-        backLeftDrive.setPower(-0.5);
-        frontRightDrive.setPower(-0.5);
-        backRightDrive.setPower(0.5);
-        sleep(800);
-        frontLeftDrive.setPower(0);
-        frontRightDrive.setPower(0);
-        backLeftDrive.setPower(0);
-        backRightDrive.setPower(0);
-        sleep(500);
+
 
 
 
@@ -293,7 +283,7 @@ public class redSideClose6Ball extends LinearOpMode {
         backLeftDrive.setPower(0.4);
         frontRightDrive.setPower(0.4);
         backRightDrive.setPower(0.4);
-        sleep(1500);
+        sleep(2000);
         frontLeftDrive.setPower(-0.4);
         frontRightDrive.setPower(-.4);
         backLeftDrive.setPower(-0.4);
@@ -313,7 +303,7 @@ public class redSideClose6Ball extends LinearOpMode {
         backLeftDrive.setPower(0.5);
         frontRightDrive.setPower(0.5);
         backRightDrive.setPower(-0.5);
-        sleep(1200);
+        sleep(1100);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
@@ -324,12 +314,12 @@ public class redSideClose6Ball extends LinearOpMode {
         //turn left 45 degrees
         angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         startAngle=angle;
-        targetAngle=targetAngle-0.8053975;
-        frontLeftDrive.setPower(-0.5);
-        backLeftDrive.setPower(-0.5);
-        frontRightDrive.setPower(0.5);
-        backRightDrive.setPower(0.5);
-        while (Math.abs(angle-startAngle)<.5){
+        targetAngle=targetAngle+0.7853975;
+        frontLeftDrive.setPower(-0.4);
+        backLeftDrive.setPower(-0.4);
+        frontRightDrive.setPower(0.4);
+        backRightDrive.setPower(0.4);
+        while (Math.abs(angle-startAngle)<.3){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
 
@@ -351,7 +341,7 @@ public class redSideClose6Ball extends LinearOpMode {
         backLeftDrive.setPower(-0.5);
         frontRightDrive.setPower(-0.5);
         backRightDrive.setPower(-0.5);
-        sleep(200);
+        sleep(400);
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
@@ -392,13 +382,13 @@ public class redSideClose6Ball extends LinearOpMode {
         //45 degrees right
         angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         startAngle=angle;
-        targetAngle=targetAngle+0.7853975;
-        frontLeftDrive.setPower(0.5);
-        backLeftDrive.setPower(0.5);
-        frontRightDrive.setPower(-0.5);
-        backRightDrive.setPower(-0.5);
+        targetAngle=targetAngle-0.7853975;
+        frontLeftDrive.setPower(0.4);
+        backLeftDrive.setPower(0.4);
+        frontRightDrive.setPower(-0.4);
+        backRightDrive.setPower(-0.4);
 
-        while (Math.abs(angle-startAngle)<.5){
+        while (Math.abs(angle-startAngle)<.3){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
 
@@ -416,7 +406,7 @@ public class redSideClose6Ball extends LinearOpMode {
         backRightDrive.setPower(0);
         sleep(250);
 
-        //strafe right
+        //strafe left
         frontLeftDrive.setPower(-0.5);
         backLeftDrive.setPower(0.5);
         frontRightDrive.setPower(0.5);
