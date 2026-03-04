@@ -246,29 +246,28 @@ public class redSideClose6Ball extends LinearOpMode {
         //turn right 45 degrees
         angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         startAngle=angle;
+        targetAngle=targetAngle-0.7853975;
+        frontLeftDrive.setPower(0.4);
+        backLeftDrive.setPower(0.4);
+        frontRightDrive.setPower(-0.4);
+        backRightDrive.setPower(-0.4);
+        // 0.7853975 is 45 degrees
+        while (Math.abs(angle-startAngle)<.3){
+            angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        }
         frontLeftDrive.setPower(0.25);
         backLeftDrive.setPower(0.25);
         frontRightDrive.setPower(-0.25);
         backRightDrive.setPower(-0.25);
-        // 0.7853975 is 45 degrees
-        targetAngle=targetAngle-0.7853975;
-        while (Math.abs(angle-startAngle)<.3){
-            angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-        }
-
-        frontLeftDrive.setPower(0.25);
-        frontRightDrive.setPower(0.25);
-        backLeftDrive.setPower(-0.25);
-        backRightDrive.setPower(-0.25);
-
         while ((angle-targetAngle)>tolerance){
             angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
         }
+
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
         backRightDrive.setPower(0);
-        sleep(1000);
+        sleep(500);
 
 
 

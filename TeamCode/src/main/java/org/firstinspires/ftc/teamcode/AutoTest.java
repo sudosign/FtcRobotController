@@ -56,7 +56,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="auto test (DO NOT USE)", group="Robot")
-
+@Disabled
 public class AutoTest extends LinearOpMode {
 
     DcMotor frontLeftDrive;

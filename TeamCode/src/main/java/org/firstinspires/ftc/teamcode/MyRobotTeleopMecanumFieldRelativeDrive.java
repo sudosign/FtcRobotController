@@ -177,26 +177,18 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
 
         if ((gamepad2.right_bumper)||(gamepad1.right_bumper)){
             //move RIGHT servo to the rotated position like 90 degrees prob
-
-
             FlickRight.setPosition(0.3);
 
         }else{
             //move RIGHT servo back to original position
             FlickRight.setPosition(0.05);
-
         }
-
         if ((gamepad2.left_bumper) || (gamepad1.left_bumper)){
             //move LEFT servo to the rotated position like 90 degrees prob
-
-
             FlickLeft.setPosition(0.575);
-
         }else{
             //move LEFT servo back to original position
             FlickLeft.setPosition(0.87);
-
         }
 
 
@@ -207,7 +199,6 @@ public class MyRobotTeleopMecanumFieldRelativeDrive extends OpMode {
         // the robot is currently pointing
         if (gamepad1.b) {
             imu.resetYaw();
-
         }
         // If you press the left trigger, you get a drive from the point of view of the robot
         // (much like driving an RC vehicle)

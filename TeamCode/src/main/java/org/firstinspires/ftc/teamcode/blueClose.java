@@ -9,12 +9,14 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "(DO NOT USE) blueClose", group = "Comp")
 @Configurable
+@Disabled
 public class blueClose extends OpMode {
     private TelemetryManager panelsTelemetry;
     private Follower follower;
