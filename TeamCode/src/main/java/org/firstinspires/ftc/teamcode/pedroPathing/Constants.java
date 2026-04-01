@@ -16,28 +16,28 @@ public class Constants {
             .mass(11.22);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
-            .maxPower(1) // TUNE
+            .maxPower(0.5) // TUNE
             .rightFrontMotorName("driveRightFront")
             .rightRearMotorName("driveRightRear")
             .leftRearMotorName("driveLeftRear")
             .leftFrontMotorName("driveLeftFront")
-            .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD);
 
     public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
             .robotWidth(18)
-            .robotLength(17)
-            .forwardTicksToInches(2.63645) //1.488
-            .strafeTicksToInches(-2.50827)
-            .turnTicksToInches(-1.84799)
+            .robotLength(18)
+            .forwardTicksToInches(0.006167158) //0.0104 is high
+            .strafeTicksToInches(0.0062131123) //-0.018423 is high
+            .turnTicksToInches(0.01458647)
             .rightFrontMotorName("driveRightFront")
             .rightRearMotorName("driveRightRear")
             .leftRearMotorName("driveLeftRear")
             .leftFrontMotorName("driveLeftFront")
-            .leftFrontEncoderDirection(Encoder.FORWARD)
-            .leftRearEncoderDirection(Encoder.FORWARD)
+            .leftFrontEncoderDirection(Encoder.REVERSE)
+            .leftRearEncoderDirection(Encoder.REVERSE)
             .rightFrontEncoderDirection(Encoder.FORWARD)
             .rightRearEncoderDirection(Encoder.FORWARD);
 
@@ -45,7 +45,6 @@ public class Constants {
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
-                .driveEncoderLocalizer(localizerConstants)
                 .pathConstraints(pathConstraints)
                 .mecanumDrivetrain(driveConstants)
                 .build();

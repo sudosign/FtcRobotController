@@ -100,11 +100,11 @@ public class aprilTagTestAlign extends LinearOpMode
     //  Drive = Error * Gain    Make these values smaller for smoother control, or larger for a more aggressive response.
     final double SPEED_GAIN  =  0.02  ;   //  Forward Speed Control "Gain". e.g. Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
     final double STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  e.g. Ramp up to 37% power at a 25 degree Yaw error.   (0.375 / 25.0)
-    final double TURN_GAIN   =  0.01  ;   //  Turn Control "Gain".  e.g. Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
+    final double TURN_GAIN   =  0.03  ;   //  Turn Control "Gain".  e.g. Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
 
     final double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
     final double MAX_AUTO_STRAFE= 0.5;   //  Clip the strafing speed to this max value (adjust for your robot)
-    final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
+    final double MAX_AUTO_TURN  = 0.5;   //  Clip the turn speed to this max value (adjust for your robot)
 
     DcMotor frontLeftDrive;
     DcMotor frontRightDrive;
@@ -131,6 +131,7 @@ public class aprilTagTestAlign extends LinearOpMode
         double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
         double  turn            = 0;        // Desired turning power/speed (-1 to +1)
         double turnMode=0; //0 is left stick controlled, 1 is camera controlled
+        double flyWheelSpeed=.65;
 
         // Initialize the Apriltag Detection process
         initAprilTag();
@@ -172,6 +173,9 @@ public class aprilTagTestAlign extends LinearOpMode
         backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -205,7 +209,7 @@ public class aprilTagTestAlign extends LinearOpMode
             telemetry.addLine("RIGHT BUMPER FOR RED SIDE");
             telemetry.update();
 
-            if (gamepad2.right_bumper){
+            if (gamepad1.right_bumper){
                 selectedSide=2;
                 DESIRED_TAG_ID = 24;
                 //side 2=red
@@ -213,6 +217,7 @@ public class aprilTagTestAlign extends LinearOpMode
             }
             if (gamepad1.left_bumper){
                 selectedSide=1;
+                DESIRED_TAG_ID=20;
                 //side 1=blue
             }
             sleep(50);
@@ -260,6 +265,15 @@ public class aprilTagTestAlign extends LinearOpMode
                 telemetry.addData("Range",  "%5.1f inches", desiredTag.ftcPose.range);
                 telemetry.addData("Bearing","%3.0f degrees", desiredTag.ftcPose.bearing);
                 telemetry.addData("Yaw","%3.0f degrees", desiredTag.ftcPose.yaw);
+                flyWheelSpeed=0.2;
+                if (desiredTag.ftcPose.range>72){
+                    flyWheelSpeed=.2; //increase this if we shoot far ig
+                    telemetry.addLine("far");
+                }else{
+                    flyWheelSpeed=.2;
+                    telemetry.addLine("close");
+                }
+
             } else {
                 telemetry.addData("\n>","Drive using joysticks to find valid target\n");
             }
@@ -278,6 +292,10 @@ public class aprilTagTestAlign extends LinearOpMode
                 //0 is driver controlled mode
             }
 
+            if (gamepad1.dpad_right){
+                rapidFire();
+            }
+
 
             //intake toggles
             if ((gamepad1.y)||(gamepad2.y)) {
@@ -291,8 +309,9 @@ public class aprilTagTestAlign extends LinearOpMode
             }
 
             if ((gamepad1.a)||(gamepad2.a)){
-                shooterRight.setPower(0.6);
-                shooterLeft.setPower(0.6);
+                flyWheelSpeed=0.2;
+                shooterRight.setPower(0.2);
+                shooterLeft.setPower(0.2);
             }
             if ((gamepad1.dpad_down)||(gamepad2.dpad_down)){
                 shooterLeft.setPower(0);
@@ -322,7 +341,7 @@ public class aprilTagTestAlign extends LinearOpMode
 
             // If turn mode is camera mode, AND we have found the desired target, Drive to target Automatically .
             if ((turnMode==1) && targetFound) {
-
+                gamepad1.rumble(50);
                 // Determine heading, range and Yaw (tag image rotation) error so we can use them to control the robot automatically.
                 double  rangeError      = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
                 double  headingError    = desiredTag.ftcPose.bearing;
@@ -351,13 +370,14 @@ public class aprilTagTestAlign extends LinearOpMode
                 }else{
                     turn=-gamepad1.right_stick_x;
                 }
+                gamepad1.stopRumble();
 
                 telemetry.addData("Manual","Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
             }
             telemetry.update();
 
             if (gamepad1.left_trigger>.5) {
-                drive=-gamepad1.left_stick_y;
+                drive=gamepad1.left_stick_y;
                 strafe=gamepad1.left_stick_x;
                 if (gamepad1.right_trigger>0.5){
                     drive=drive/2;
@@ -365,8 +385,8 @@ public class aprilTagTestAlign extends LinearOpMode
                 }
                 telemetry.addLine("Robot Centric");
             } else {
-                double theta = Math.atan2(-gamepad1.left_stick_y, gamepad1.left_stick_x);
-                double r = Math.hypot(gamepad1.left_stick_x, -gamepad1.left_stick_y);
+                double theta = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x);
+                double r = Math.hypot(-gamepad1.left_stick_x, gamepad1.left_stick_y);
 
                 // Second, rotate angle by the angle the robot is pointing
                 theta = -(AngleUnit.normalizeRadians(theta -
@@ -439,7 +459,7 @@ public class aprilTagTestAlign extends LinearOpMode
         // Decimation = 3 ..  Detect 2" Tag from 4  feet away at 30 Frames Per Second
         // Decimation = 3 ..  Detect 5" Tag from 10 feet away at 30 Frames Per Second
         // Note: Decimation can be changed on-the-fly to adapt during a match.
-        aprilTag.setDecimation(2);
+        aprilTag.setDecimation(3);
 
         // Create the vision portal by using a builder.
         if (USE_WEBCAM) {
@@ -453,6 +473,36 @@ public class aprilTagTestAlign extends LinearOpMode
                     .addProcessor(aprilTag)
                     .build();
         }
+    }
+
+    public void rapidFire(){
+
+        //shoot right
+        FlickRight.setPosition(0.3);
+        sleep(250);
+
+        //shoot left
+        FlickLeft.setPosition(0.575);
+        sleep(500);
+
+        //reset both
+        FlickRight.setPosition(0.05);
+        FlickLeft.setPosition(0.87);
+        sleep(500);
+        //push third ball
+        intake.setPower(-1);
+        sleep(250);
+
+        //shoot both
+        FlickRight.setPosition(0.3);
+        FlickLeft.setPosition(0.575);
+
+        sleep(500);
+        FlickLeft.setPosition(0.87);
+        FlickRight.setPosition(0.05);
+        intake.setPower(0);
+        shooterRight.setPower(0);
+        shooterLeft.setPower(0);
     }
 
     /*
