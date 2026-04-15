@@ -33,6 +33,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -42,6 +43,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.mechanisms.IntakeControl;
+import org.firstinspires.ftc.teamcode.mechanisms.ShootSequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -110,13 +113,18 @@ public class aprilTagTestAlign extends LinearOpMode
     DcMotor frontRightDrive;
     DcMotor backLeftDrive;
     DcMotor backRightDrive;
-    DcMotor shooterLeft;
+    DcMotorEx shooterLeft;
     DcMotor intake;
-    DcMotor shooterRight;
+    DcMotorEx shooterRight;
     Servo FlickLeft;
     Servo FlickRight;
     DistanceSensor distanceSensor;
     IMU imu;
+
+    private IntakeControl intakeControl = new IntakeControl();
+    private ShootSequence shooter = new ShootSequence();
+
+    private boolean shotsTriggered=false;
 
     private static final boolean USE_WEBCAM = true;  // Set true to use a webcam, or false for a phone camera
     private static int DESIRED_TAG_ID = 20;     // Choose the tag you want to approach or set to -1 for ANY tag.
@@ -131,10 +139,13 @@ public class aprilTagTestAlign extends LinearOpMode
         double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
         double  turn            = 0;        // Desired turning power/speed (-1 to +1)
         double turnMode=0; //0 is left stick controlled, 1 is camera controlled
-        double flyWheelSpeed=.65;
+        double flyWheelSpeed=.6;
 
         // Initialize the Apriltag Detection process
         initAprilTag();
+
+        intakeControl.init(hardwareMap);
+        shooter.init(hardwareMap);
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must match the names assigned during the robot configuration.
@@ -148,9 +159,9 @@ public class aprilTagTestAlign extends LinearOpMode
         FlickLeft = hardwareMap.get(Servo.class, "FlickLeft" );
         FlickRight = hardwareMap.get(Servo.class, "FlickRight");
 
-        shooterLeft = hardwareMap.get(DcMotor.class, "shooterLeft");
+        shooterLeft = hardwareMap.get(DcMotorEx.class, "shooterLeft");
         intake = hardwareMap.get(DcMotor.class, "intake");
-        shooterRight = hardwareMap.get(DcMotor.class, "shooterRight");
+        shooterRight = hardwareMap.get(DcMotorEx.class, "shooterRight");
 
         shooterRight.setDirection(DcMotor.Direction.REVERSE);
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -168,13 +179,13 @@ public class aprilTagTestAlign extends LinearOpMode
         frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
-        frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         frontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -265,12 +276,12 @@ public class aprilTagTestAlign extends LinearOpMode
                 telemetry.addData("Range",  "%5.1f inches", desiredTag.ftcPose.range);
                 telemetry.addData("Bearing","%3.0f degrees", desiredTag.ftcPose.bearing);
                 telemetry.addData("Yaw","%3.0f degrees", desiredTag.ftcPose.yaw);
-                flyWheelSpeed=0.2;
+                flyWheelSpeed=0.6;
                 if (desiredTag.ftcPose.range>72){
-                    flyWheelSpeed=.2; //increase this if we shoot far ig
+                    flyWheelSpeed=.6; //increase this if we shoot far ig
                     telemetry.addLine("far");
                 }else{
-                    flyWheelSpeed=.2;
+                    flyWheelSpeed=.6;
                     telemetry.addLine("close");
                 }
 
@@ -292,27 +303,43 @@ public class aprilTagTestAlign extends LinearOpMode
                 //0 is driver controlled mode
             }
 
-            if (gamepad1.dpad_right){
-                rapidFire();
+            if (!shooter.isBusy()){
+                shotsTriggered=false;
             }
+
+            if (gamepad1.dpad_right){
+
+
+                if (!shotsTriggered){
+                    shooter.fireShots(3);
+                    shotsTriggered=true;
+                }
+            }
+            shooter.update();
 
 
             //intake toggles
             if ((gamepad1.y)||(gamepad2.y)) {
-                intake.setPower(-1);
+                intakeControl.setIntakePower(-1);
 
             } else if ((gamepad1.dpad_up)||(gamepad2.dpad_up)){
-                intake.setPower(0);
+                intakeControl.setIntakePower(0);
 
             } else if ((gamepad1.x)||(gamepad2.x)){
-                intake.setPower(1);
+                intakeControl.setIntakePower(1);
             }
+            intakeControl.update();
+
 
             if ((gamepad1.a)||(gamepad2.a)){
-                flyWheelSpeed=0.2;
-                shooterRight.setPower(0.2);
-                shooterLeft.setPower(0.2);
+                shooterRight.setPower(flyWheelSpeed);
+                shooterLeft.setPower(flyWheelSpeed);
+
             }
+            shooterRight.getCurrentPosition();
+            shooterLeft.getCurrentPosition();
+
+
             if ((gamepad1.dpad_down)||(gamepad2.dpad_down)){
                 shooterLeft.setPower(0);
                 shooterRight.setPower(0);
@@ -365,7 +392,7 @@ public class aprilTagTestAlign extends LinearOpMode
                 //drive  = -gamepad1.left_stick_y  / 2.0;  // Reduce drive rate to 50%.
                 //strafe = -gamepad1.left_stick_x  / 2.0;  // Reduce strafe rate to 50%.
 
-                if (gamepad1.left_trigger>0.5){
+                if (gamepad1.right_trigger>0.5){
                     turn   = -gamepad1.right_stick_x / 2;  // Reduce turn rate to 33%.
                 }else{
                     turn=-gamepad1.right_stick_x;
