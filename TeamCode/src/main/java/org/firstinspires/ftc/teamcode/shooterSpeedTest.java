@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@TeleOp(name="Shooter Speed Finder", group = "Concept")
 public class shooterSpeedTest extends LinearOpMode {
     DcMotorEx shooterLeft;
     DcMotor intake;
@@ -15,7 +17,8 @@ public class shooterSpeedTest extends LinearOpMode {
 
 
     @Override public void runOpMode(){
-        double flyWheelSpeed=.6;
+        double flyWheelSpeed=1100;
+        double targetFlywheelSpeed=1000;
         double leftPos=0;
         double rightPos=0;
 
@@ -30,20 +33,25 @@ public class shooterSpeedTest extends LinearOpMode {
         shooterRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
         while (opModeIsActive()){
 
             if ((gamepad1.a)||(gamepad2.a)){
-                shooterRight.setPower(flyWheelSpeed);
-                shooterLeft.setPower(flyWheelSpeed);
+                shooterRight.setVelocity(flyWheelSpeed);
+                shooterLeft.setVelocity(flyWheelSpeed);
 
             }
             telemetry.addLine("Right Speed: " + String.valueOf(shooterRight.getVelocity()));
             telemetry.addLine("Left Speed: " + String.valueOf(shooterLeft.getVelocity()));
+            telemetry.update();
+
+            if (shooterLeft.getVelocity()>targetFlywheelSpeed){
+                gamepad1.rumble(50);
+            }
 
 
             if ((gamepad1.dpad_down)||(gamepad2.dpad_down)){

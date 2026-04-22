@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class ShootSequence {
-    private DcMotor shooterLeft;
+    private DcMotorEx shooterLeft;
     private DcMotor intake;
-    private DcMotor shooterRight;
+    private DcMotorEx shooterRight;
     private Servo paddleLeft;
     private Servo paddleRight;
 
@@ -40,23 +41,23 @@ public class ShootSequence {
 
 
     //reset time is the same for both
-    private double paddle_reset_time = 1;
+    private double paddle_reset_time = 0.5;
 
 
     // =============== FLYWHEEL ===============
     private int shotsRemaining = 0;
     private boolean preSpinFlywheel=false;
     private double flywheelVelocity=0;
-    private double MIN_FLYWHEEL_RPM = 67676767;
-    private double TARGET_FLYWHEEL_RPM=0.6;
-    private double FLYWHEEL_MAX_SPINUP_TIME=3;
+    private double MIN_FLYWHEEL_RPM = 1050;
+    private double TARGET_FLYWHEEL_RPM=1100;
+    private double FLYWHEEL_MAX_SPINUP_TIME=2;
 
     public void init(HardwareMap hwMap){
         paddleLeft=hwMap.get(Servo.class, "FlickLeft");
         paddleRight=hwMap.get(Servo.class, "FlickRight");
 
-        shooterLeft=hwMap.get(DcMotor.class,"shooterLeft");
-        shooterRight=hwMap.get(DcMotor.class,"shooterRight");
+        shooterLeft=hwMap.get(DcMotorEx.class,"shooterLeft");
+        shooterRight=hwMap.get(DcMotorEx.class,"shooterRight");
 
         intake=hwMap.get(DcMotor.class,"intake");
 
@@ -86,8 +87,8 @@ public class ShootSequence {
                     paddleRight.setPosition(right_rest_position);
 
                     //TODO MAKE FLYWHEEL ENCODER VELOCITY BASIC PID LOGIC
-                    shooterRight.setPower(TARGET_FLYWHEEL_RPM);
-                    shooterLeft.setPower(TARGET_FLYWHEEL_RPM);
+                    shooterRight.setVelocity(TARGET_FLYWHEEL_RPM);
+                    shooterLeft.setVelocity(TARGET_FLYWHEEL_RPM);
 
                     stateTimer.reset();
 
@@ -98,8 +99,9 @@ public class ShootSequence {
                     paddleRight.setPosition(right_rest_position);
 
                     //TODO MAKE FLYWHEEL ENCODER VELOCITY BASIC PID LOGIC
-                    shooterRight.setPower(TARGET_FLYWHEEL_RPM);
-                    shooterLeft.setPower(TARGET_FLYWHEEL_RPM);
+                    shooterRight.setVelocity(TARGET_FLYWHEEL_RPM);
+                    shooterLeft.setVelocity(TARGET_FLYWHEEL_RPM);
+
 
                     stateTimer.reset();
 
@@ -107,7 +109,8 @@ public class ShootSequence {
                 }
                 break;
             case PRE_SPIN_UP:
-                if (stateTimer.seconds()>FLYWHEEL_MAX_SPINUP_TIME && shotsRemaining>0){
+                flywheelVelocity=shooterLeft.getVelocity();
+                if ((stateTimer.seconds()>FLYWHEEL_MAX_SPINUP_TIME || flywheelVelocity>MIN_FLYWHEEL_RPM) && (shotsRemaining>0)){
                     paddleLeft.setPosition(left_shoot_position);
                     stateTimer.reset();
 
@@ -117,6 +120,7 @@ public class ShootSequence {
                 break;
             case SPIN_UP:
                 //velocity maybe idk not necesaary but like cool?
+                flywheelVelocity=shooterLeft.getVelocity();
                 if (flywheelVelocity>MIN_FLYWHEEL_RPM || stateTimer.seconds()>FLYWHEEL_MAX_SPINUP_TIME){
                     paddleLeft.setPosition(left_shoot_position);
                     stateTimer.reset();
@@ -167,7 +171,6 @@ public class ShootSequence {
                 if (stateTimer.seconds()>paddle_shoot_time){
                     stateTimer.reset();
 
-                    shotsRemaining--;
                     shotsRemaining=0;
 
                     paddleLeft.setPosition(left_rest_position);
@@ -187,7 +190,7 @@ public class ShootSequence {
     }
 
     public void fireShots(int numberOfShots){
-        if (shooterState==ShooterState.IDLE){
+        if (shooterState==ShooterState.IDLE || shooterState==ShooterState.PRE_SPIN_UP){
             shotsRemaining=numberOfShots;
         }
     }

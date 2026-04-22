@@ -306,17 +306,13 @@ public class aprilTagTestAlign extends LinearOpMode
             if (!shooter.isBusy()){
                 shotsTriggered=false;
             }
-
             if (gamepad1.dpad_right){
-
-
                 if (!shotsTriggered){
                     shooter.fireShots(3);
                     shotsTriggered=true;
                 }
             }
             shooter.update();
-
 
             //intake toggles
             if ((gamepad1.y)||(gamepad2.y)) {
@@ -336,9 +332,6 @@ public class aprilTagTestAlign extends LinearOpMode
                 shooterLeft.setPower(flyWheelSpeed);
 
             }
-            shooterRight.getCurrentPosition();
-            shooterLeft.getCurrentPosition();
-
 
             if ((gamepad1.dpad_down)||(gamepad2.dpad_down)){
                 shooterLeft.setPower(0);
@@ -368,7 +361,7 @@ public class aprilTagTestAlign extends LinearOpMode
 
             // If turn mode is camera mode, AND we have found the desired target, Drive to target Automatically .
             if ((turnMode==1) && targetFound) {
-                gamepad1.rumble(50);
+
                 // Determine heading, range and Yaw (tag image rotation) error so we can use them to control the robot automatically.
                 double  rangeError      = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
                 double  headingError    = desiredTag.ftcPose.bearing;
