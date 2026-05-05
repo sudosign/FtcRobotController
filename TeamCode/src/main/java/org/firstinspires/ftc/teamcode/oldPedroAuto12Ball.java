@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.mechanisms.IntakeControl;
 import org.firstinspires.ftc.teamcode.mechanisms.ShootSequence;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name="blueClose9BallPedro", group = "Concept")
-public class pedroAuto12Ball extends OpMode {
+@Autonomous(name="blueClose12BallPedro", group = "Concept")
+public class oldPedroAuto12Ball extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;
 
@@ -51,12 +51,13 @@ public class pedroAuto12Ball extends OpMode {
     private final Pose spikeOnePose = new Pose(45.717,84.321,Math.toRadians(180));
     private final Pose collectSpikeOnePose = new Pose (15.547169811320757,84.321,Math.toRadians(180));
 
-    private final Pose gate= new Pose(15.509000000000002,74.26415094339625,Math.toRadians(180));
+    private final Pose gate= new Pose(14.5,74.26415094339625,Math.toRadians(180));
     private final Pose gateControlPoint = new Pose (26.35849056603773,77.72641509433963);
 
     private final Pose shootPoseTwo = new Pose(38.340,102.751, Math.toRadians(133));
     private final Pose spikeTwoPose=new Pose(45.71698,59.849,Math.toRadians(180));
     private final Pose collectSpikeTwoPose=new Pose(17,59.849056,Math.toRadians(180));
+    private final Pose spikeTwoShoot3ControlPoint=new Pose(52.0850,77.8094);
     private final Pose shootPoseThree = new Pose(38.340,102.751, Math.toRadians(133));
     private final Pose spikeThreePose = new Pose(42.54716867924528,35.60377358490567,Math.toRadians(180));
     private final Pose collectSpikeThreePose=new Pose (10,35.60377358490567,Math.toRadians(180));
@@ -95,7 +96,7 @@ public class pedroAuto12Ball extends OpMode {
                 .setLinearHeadingInterpolation(spikeTwoPose.getHeading(),collectSpikeTwoPose.getHeading())
                 .build();
         driveSpike2ToShoot3 = follower.pathBuilder()
-                .addPath(new BezierLine(collectSpikeTwoPose,shootPoseThree))
+                .addPath(new BezierCurve(collectSpikeTwoPose,spikeTwoShoot3ControlPoint,shootPoseThree))
                 .setLinearHeadingInterpolation(collectSpikeTwoPose.getHeading(),shootPoseThree.getHeading())
                 .build();
         driveShoot3ToSpike3 = follower.pathBuilder()

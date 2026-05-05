@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -36,12 +37,12 @@ public class ShootSequence {
 
 
     //TODO TUNE THESE TO BE FASTER
-    private double paddle_shoot_time = 0.5;
-    private double center_shoot_delay = 0.5;
+    private double paddle_shoot_time = 0.4;
+    private double center_shoot_delay = 0.3;
 
 
     //reset time is the same for both
-    private double paddle_reset_time = 0.5;
+    private double paddle_reset_time = 0.4;
 
 
     // =============== FLYWHEEL ===============
@@ -66,8 +67,12 @@ public class ShootSequence {
         shooterLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         //TODO FIND OUT HOW ENCODER WORKS AND CHANGE TO USING ENCODER
-        shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(500,0,0,11);
+        shooterLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,pidfCoefficients);
+        shooterRight.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,pidfCoefficients);
 
 
         shooterState = ShooterState.IDLE;

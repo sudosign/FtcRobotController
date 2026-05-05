@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
@@ -92,8 +93,8 @@ import java.util.concurrent.TimeUnit;
  *
  */
 
-@TeleOp(name="Omni Drive To AprilTag", group = "Concept")
-public class aprilTagTestAlign extends LinearOpMode
+@TeleOp(name="Demo/Outreach Code")
+public class demoCode extends LinearOpMode
 {
     // Adjust these numbers to suit your robot.
     final double DESIRED_DISTANCE = 12.0; //  this is how close the camera should get to the target (inches)
@@ -306,13 +307,7 @@ public class aprilTagTestAlign extends LinearOpMode
             if (!shooter.isBusy()){
                 shotsTriggered=false;
             }
-            if (gamepad1.dpad_right){
-                if (!shotsTriggered){
-                    shooter.fireShots(3);
-                    shotsTriggered=true;
-                }
-            }
-            shooter.update();
+
 
             //intake toggles
             if ((gamepad1.y)||(gamepad2.y)) {
@@ -354,7 +349,7 @@ public class aprilTagTestAlign extends LinearOpMode
                 FlickLeft.setPosition(0.87);
             }
 
-            if (gamepad1.b) {
+            if (gamepad2.b) {
                 imu.resetYaw();
             }
 
@@ -374,6 +369,9 @@ public class aprilTagTestAlign extends LinearOpMode
 
                 //for our auto align we are only going to turn
                 turn   = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
+                if (gamepad2.left_trigger>0.5){
+                    turn=0;
+                }
 
 
 
@@ -385,11 +383,9 @@ public class aprilTagTestAlign extends LinearOpMode
                 //drive  = -gamepad1.left_stick_y  / 2.0;  // Reduce drive rate to 50%.
                 //strafe = -gamepad1.left_stick_x  / 2.0;  // Reduce strafe rate to 50%.
 
-                if (gamepad1.right_trigger>0.5){
-                    turn   = -gamepad1.right_stick_x / 2;  // Reduce turn rate to 33%.
-                }else{
-                    turn=-gamepad1.right_stick_x;
-                }
+
+                turn   = -gamepad1.right_stick_x / 2;  // Reduce turn rate to 33%.
+
                 gamepad1.stopRumble();
 
                 telemetry.addData("Manual","Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
@@ -403,6 +399,7 @@ public class aprilTagTestAlign extends LinearOpMode
                     drive=drive/2;
                     strafe=strafe/2;
                 }
+
                 telemetry.addLine("Robot Centric");
             } else {
                 double theta = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x);
@@ -416,14 +413,16 @@ public class aprilTagTestAlign extends LinearOpMode
                 drive = r * Math.sin(theta);
                 strafe = r * Math.cos(theta);
 
-                if (gamepad1.right_trigger>0.5){
-                    drive=drive/2;
-                    strafe=strafe/2;
-                }
+                drive=drive/2;
+                strafe=strafe/2;
 
                 telemetry.addLine("Field Centric");
             }
-
+            if (gamepad2.left_trigger>0.5){
+                drive=0;
+                strafe=0;
+                turn=0;
+            }
             // Apply desired axes motions to the drivetrain.
             moveRobot(drive, strafe, turn);
             sleep(10);
